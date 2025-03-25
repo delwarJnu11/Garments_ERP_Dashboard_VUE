@@ -6,13 +6,13 @@ import Sidebar from './Sidebar.vue';
 </script>
 
 <template>
-	<div class="flex h-screen bg-gray-100">
+	<div class="flex bg-gray-100 h-screen">
 		<Sidebar />
 
 		<div class="flex flex-col flex-1">
 			<Header />
 
-			<main class="flex-1 p-6">
+			<main class="flex-1 p-6 h-screen overflow-y-auto hover:overflow-y-scroll">
 				<RouterView />
 			</main>
 

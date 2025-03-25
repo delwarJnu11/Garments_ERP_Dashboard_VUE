@@ -17,7 +17,7 @@ const toggleMenu = (menu) => {
 <template>
 	<aside
 		:class="isSidebarOpen ? 'w-64' : 'w-20'"
-		class="bg-blue-500 text-white shadow-md transition-all duration-300 ease-in-out"
+		class="bg-[#3572EF] text-white shadow-md transition-all duration-300 ease-in-out w-64 h-screen overflow-y-auto"
 	>
 		<div class="flex items-center justify-between px-4 py-3">
 			<h2
