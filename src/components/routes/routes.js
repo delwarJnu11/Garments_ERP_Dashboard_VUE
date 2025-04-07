@@ -1,3 +1,5 @@
+import Create from '@/pages/Roles/Create.vue';
+import Roles from '@/pages/Roles/Roles.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../dashboard/Dashboard.vue';
 import Layout from '../layout/Layout.vue';
@@ -14,6 +16,14 @@ const routes = [
 			{
 				path: '/dashboard',
 				component: Dashboard,
+			},
+			{
+				path: '/roles',
+				component: Roles,
+			},
+			{
+				path: '/roles/create',
+				component: Create,
 			},
 		],
 	},
