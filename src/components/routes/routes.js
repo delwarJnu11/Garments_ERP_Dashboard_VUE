@@ -1,3 +1,4 @@
+import Login from '@/pages/Auth/Login.vue';
 import Create from '@/pages/Roles/Create.vue';
 import Roles from '@/pages/Roles/Roles.vue';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -7,10 +8,14 @@ import Layout from '../layout/Layout.vue';
 const routes = [
 	{
 		path: '/',
+		component: Login,
+	},
+	{
+		path: '/dashboard',
 		component: Layout,
 		children: [
 			{
-				path: '/',
+				path: '/dashboard',
 				component: Dashboard,
 			},
 			{
