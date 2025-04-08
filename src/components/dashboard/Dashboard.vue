@@ -19,8 +19,7 @@
 			</div>
 			<div class="text-center bg-blue-500 rounded-md shadow-md p-3">
 				<h2>
-					<strong class="text-3xl tracking-wide leading-12 text-white"
-						>20,00,000</strong
+					<strong class="text-3xl tracking-wide leading-12 text-white">20,00,000 ৳</strong
 					>
 				</h2>
 				<h4 class="text-xl tracking-wide leading-10 text-white">
@@ -29,8 +28,7 @@
 			</div>
 			<div class="text-center bg-purple-500 rounded-md shadow-md p-3">
 				<h2>
-					<strong class="text-3xl tracking-wide leading-12 text-white"
-						>5,00,000</strong
+					<strong class="text-3xl tracking-wide leading-12 text-white">5,00,000 ৳</strong
 					>
 				</h2>
 				<h4 class="text-xl tracking-wide leading-10 text-white">
