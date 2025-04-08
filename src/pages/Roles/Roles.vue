@@ -1,10 +1,34 @@
 <script setup>
 import { api } from '@/api';
+import Modal from '@/components/ui/Modal.vue';
+import Pagination from '@/components/ui/Pagination.vue';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 
 const roles = ref([]);
 const search = ref('');
+const isOpen = ref(false);
+const roleToEdit = ref({
+	id: null,
+	name: '',
+});
+
+// Edit Role
+const editRole = (role) => {
+	roleToEdit.value = { ...role };
+	isOpen.value = true;
+};
+
+// Modal Close
+const closeModal = () => {
+	isOpen.value = false;
+};
+
+//Updat Role
+const updateRole = () => {
+	console.log('Updating role:', roleToEdit.value);
+	closeModal();
+};
 
 // Fetch Roles
 const fetchRoles = async (url) => {
@@ -14,7 +38,7 @@ const fetchRoles = async (url) => {
 	try {
 		if (url !== null) {
 			const res = await api.get(url, { params: { search: search.value } });
-			console.log(res.data.roles);
+			// console.log(res.data.roles);
 			roles.value = res.data.roles;
 		}
 	} catch (error) {
@@ -49,21 +73,9 @@ onMounted(() => {
 		</RouterLink>
 	</div>
 	<div>
-		<table class="container mx-auto bg-white rounded-xl shadow-sm">
-			<thead>
-				<tr
-					class="text-left bg-gray-50 text-sm text-gray-600 uppercase tracking-wider"
-				>
-					<th class="px-6 py-3">SL.</th>
-					<th class="px-6 py-3">Name</th>
-					<th class="px-6 py-3">Actions</th>
-				</tr>
-			</thead>
-
-			<!-- Check if data is loaded or not -->
+		<table class="container mx-auto">
 			<tbody class="text-sm text-gray-700 divide-y divide-gray-100">
 				<template v-if="!roles.data || roles.data.length === 0">
-					<!-- Skeleton loader rows -->
 					<tr
 						v-for="n in 5"
 						:key="n"
@@ -84,7 +96,6 @@ onMounted(() => {
 					</tr>
 				</template>
 
-				<!-- Table rows after data is loaded -->
 				<template v-else>
 					<tr
 						v-for="role in roles.data"
@@ -114,80 +125,19 @@ onMounted(() => {
 					</tr>
 				</template>
 			</tbody>
+			<Modal
+				v-if="isOpen"
+				:isOpen="isOpen"
+				:role="roleToEdit"
+				:closeModal="closeModal"
+				:updateRole="updateRole"
+			/>
 		</table>
 	</div>
 	<!-- pagination -->
-	<div
-		class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
-	>
-		<div class="flex flex-1 justify-between sm:hidden">
-			<a
-				href="#"
-				class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-				>Previous</a
-			>
-			<a
-				href="#"
-				class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-				>Next</a
-			>
-		</div>
-		<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-			<div>
-				<p class="text-sm text-gray-700">
-					Showing
-					{{ ' ' }}
-					<span class="font-medium">{{
-						roles.current_page === 1
-							? 1
-							: roles.per_page * (roles?.current_page - 1) + 1
-					}}</span>
-					{{ ' ' }}
-					to
-					{{ ' ' }}
-					<span class="font-medium">{{
-						roles.total <= roles?.per_page * roles?.current_page
-							? roles.total
-							: roles?.per_page * roles?.current_page
-					}}</span>
-					{{ ' ' }}
-					of
-					{{ ' ' }}
-					<span class="font-medium">{{ roles?.total }}</span>
-					{{ ' ' }}
-					results
-				</p>
-			</div>
-			<div>
-				<nav
-					class="isolate inline-flex -space-x-px rounded-md shadow-xs"
-					aria-label="Pagination"
-				>
-					<a
-						v-for="link in roles.links"
-						:key="link.label"
-						@click.prevent="fetchRoles(link.url)"
-						:class="[
-							'relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 md:inline-flex cursor-pointer',
-							link.active
-								? 'z-10 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-								: 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0',
-							roles.last_page === roles.current_page &&
-							fixedPrevNext(link.label) === 'Next'
-								? 'opacity-50'
-								: '',
-						]"
-					>
-						{{ fixedPrevNext(link.label) }}
-					</a>
-				</nav>
-			</div>
-		</div>
-	</div>
+	<Pagination
+		:items="roles"
+		:fixedPrevNext="fixedPrevNext"
+		:fetchData="fetchRoles"
+	/>
 </template>
-
-<style scoped>
-table {
-	width: 100%;
-}
-</style>

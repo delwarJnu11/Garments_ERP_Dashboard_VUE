@@ -12,7 +12,7 @@ import Sidebar from './Sidebar.vue';
 		<div class="flex flex-col flex-1">
 			<Header />
 
-			<main class="flex-1 p-6 h-screen overflow-y-auto hover:overflow-y-scroll">
+			<main class="flex-1 p-6 h-screen overflow-y-auto">
 				<RouterView />
 			</main>
 
