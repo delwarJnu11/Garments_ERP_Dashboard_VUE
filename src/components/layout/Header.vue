@@ -2,7 +2,7 @@
 
 <template>
 	<header
-		class="bg-white shadow-md px-6 py-4 flex justify-between items-center"
+		class="bg-white  z-10  shadow-md px-6 py-4 flex justify-between items-center"
 	>
 		<h1 class="text-xl font-bold">Dashboard</h1>
 		<div>

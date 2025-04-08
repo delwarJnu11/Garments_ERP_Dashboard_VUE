@@ -3,6 +3,7 @@ import { LayoutDashboard } from 'lucide-vue-next';
 import { ref } from 'vue';
 import OrdersBuyers from '../moduleMenu/OrdersBuyers.vue';
 import Production from '../moduleMenu/Production.vue';
+import Users from '../moduleMenu/Users.vue';
 
 const isSidebarOpen = ref(true);
 
@@ -61,6 +62,11 @@ const toggleMenu = (menu) => {
 					>
 				</li>
 
+				<!-- User Management -->
+				<Users
+					:activeMenu="activeMenu"
+					:toggleMenu="toggleMenu"
+				/>
 				<!-- Production Management -->
 				<Production
 					:activeMenu="activeMenu"
