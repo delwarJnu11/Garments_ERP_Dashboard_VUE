@@ -1,6 +1,7 @@
 <script setup>
 import { LayoutDashboard } from 'lucide-vue-next';
 import { ref } from 'vue';
+import Accounts from '../moduleMenu/Accounts.vue';
 import OrdersBuyers from '../moduleMenu/OrdersBuyers.vue';
 import Production from '../moduleMenu/Production.vue';
 
@@ -70,6 +71,11 @@ const toggleMenu = (menu) => {
 				<OrdersBuyers
 					:activeMenu="activeMenu"
 					:toggleMenu="toggleMenu"
+				/>
+
+				<Accounts
+				:activeMenu="activeMenu"
+				:toggleMenu="toggleMenu"
 				/>
 			</ul>
 		</nav>
