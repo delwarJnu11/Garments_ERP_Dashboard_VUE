@@ -1,17 +1,9 @@
 <script setup>
-<<<<<<< HEAD
-import { LayoutDashboard } from 'lucide-vue-next';
-import { ref } from 'vue';
-import OrdersBuyers from '../moduleMenu/OrdersBuyers.vue';
-import Production from '../moduleMenu/Production.vue';
-import HRManagement from '../moduleMenu/HRManagement.vue';
-=======
 import { LayoutDashboard } from "lucide-vue-next";
 import { ref } from "vue";
 import OrdersBuyers from "../moduleMenu/OrdersBuyers.vue";
 import Production from "../moduleMenu/Production.vue";
 import Users from "../moduleMenu/Users.vue";
->>>>>>> d3d3e953305e2237c716764bedbff2e1936c8ecf
 
 const isSidebarOpen = ref(true);
 
@@ -75,18 +67,7 @@ const toggleMenu = (menu) => {
 				<!-- Orders & Buyers -->
 				<OrdersBuyers
 					:activeMenu="activeMenu"
-<<<<<<< HEAD
-					:toggleMenu="toggleMenu"
-				/>
-
-				<!-- HR and Workforce Management -->
-				<HRManagement
-				:activeMenu="activeMenu"
-				:toggleMenu="toggleMenu"
-				/>
-=======
 					:toggleMenu="toggleMenu" />
->>>>>>> d3d3e953305e2237c716764bedbff2e1936c8ecf
 			</ul>
 		</nav>
 	</aside>
