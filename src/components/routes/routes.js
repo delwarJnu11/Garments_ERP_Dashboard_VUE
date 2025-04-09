@@ -12,6 +12,8 @@ import Accounts from '../modules/accounts/account/Accounts.vue';
 import CreateAccount from '../modules/accounts/account/CreateAccount.vue';
 import AccountGroups from '../modules/accounts/accountGroup/AccountGroups.vue';
 import CreateAccountGroup from '../modules/accounts/accountGroup/CreateAccountGroup.vue';
+import VueCrud from '../modules/accounts/vueCrud/VueCrud.vue';
+import CreateVueCrud from '../modules/accounts/vueCrud/CreateVueCrud.vue';
 
 const routes = [
 	{
@@ -74,6 +76,18 @@ const routes = [
 			{
 				path: '/accounts/journals',
 				component: Journals,
+			},
+			{
+				path: '/vueCrud',
+				component: VueCrud,
+			},
+			{
+				path: '/vueCrud/create',
+				component: CreateVueCrud,
+			},
+			{
+				path: '/vueCrud/update/:id',
+				component: CreateVueCrud,
 			},
 		],
 	},
