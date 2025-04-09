@@ -5,6 +5,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../dashboard/Dashboard.vue';
 import Layout from '../layout/Layout.vue';
 import User from '@/pages/User.vue';
+import Category from '@/pages/Category.vue';
+import CreateCategory from '../categories/CreateCategory.vue';
 
 const routes = [
 	{
@@ -34,6 +36,14 @@ const routes = [
 			{
 				path: '/users',
 				component: User,
+			},
+			{
+				path: '/categories',
+				component: Category,
+			},
+			{
+				path: '/categories/create',
+				component: CreateCategory,
 			},
 			
 		],

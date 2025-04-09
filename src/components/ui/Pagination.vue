@@ -6,10 +6,12 @@ const props = defineProps(['items', 'fetchData']);
 const items = ref({ ...props.items });
 watch(
 	() => props.items,
+	
 	(newVal) => {
 		items.value = { ...newVal };
 	}
 );
+console.log(props.items)
 </script>
 
 <template>
