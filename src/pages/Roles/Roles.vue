@@ -73,7 +73,7 @@ onMounted(() => {
 	/>
 	<div class="overflow-x-auto rounded-lg shadow-md">
 		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
-			<thead class="bg-gray-100 text-gray-700 uppercase">
+			<thead class="bg-primary text-white uppercase">
 				<tr class="text-center">
 					<th class="px-6 py-4">SL.</th>
 					<th class="px-6 py-4">Role Name</th>
@@ -108,9 +108,11 @@ onMounted(() => {
 						:key="role?.id"
 						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center"
 					>
-						<td class="px-6 py-4">{{ role?.id }}</td>
-						<td class="px-6 py-4 font-medium">{{ role?.name }}</td>
-						<td class="px-6 py-4">
+						<td class="border border-gray-200 px-6 py-4">{{ role?.id }}</td>
+						<td class="border border-gray-200 px-6 py-4 font-medium">
+							{{ role?.name }}
+						</td>
+						<td class="border border-gray-200 px-6 py-4">
 							<div class="flex items-center justify-center gap-3">
 								<button
 									@click="editRole(role)"
