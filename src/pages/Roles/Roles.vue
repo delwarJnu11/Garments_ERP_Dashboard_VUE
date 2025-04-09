@@ -59,14 +59,6 @@ const fetchRoles = async (url) => {
 	}
 };
 
-// Fixed Prev and Next Button
-const fixedPrevNext = (label) => {
-	if (label === '&laquo; Previous') return 'Prev';
-	if (label === 'Next &raquo;') return 'Next';
-
-	return label;
-};
-
 onMounted(() => {
 	fetchRoles();
 });
@@ -151,7 +143,21 @@ onMounted(() => {
 	<!-- pagination -->
 	<Pagination
 		:items="roles"
-		:fixedPrevNext="fixedPrevNext"
 		:fetchData="fetchRoles"
 	/>
 </template>
+<style scoped>
+.slide-fade-enter-active {
+	transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+	transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+	transform: translateX(20px);
+	opacity: 0;
+}
+</style>
