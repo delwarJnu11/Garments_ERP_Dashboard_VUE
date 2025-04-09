@@ -7,6 +7,7 @@ import Layout from '../layout/Layout.vue';
 import User from '@/pages/User.vue';
 import Category from '@/pages/Category.vue';
 import CreateCategory from '../categories/CreateCategory.vue';
+import UpdateCategory from '../categories/UpdateCategory.vue';
 
 const routes = [
 	{
@@ -44,6 +45,10 @@ const routes = [
 			{
 				path: '/categories/create',
 				component: CreateCategory,
+			},
+			{
+				path: '/categories/edit/:id',
+				component: UpdateCategory,
 			},
 			
 		],
