@@ -1,9 +1,11 @@
 <script setup>
 import { api } from '@/api';
 import Modal from '@/components/ui/Modal.vue';
+import PageHeading from '@/components/ui/PageHeading.vue';
 import Pagination from '@/components/ui/Pagination.vue';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
+import { toast } from 'vue3-toastify';
 
 const roles = ref([]);
 const search = ref('');
@@ -12,6 +14,7 @@ const roleToEdit = ref({
 	id: null,
 	name: '',
 });
+
 
 // Edit Role
 const editRole = (role) => {
@@ -25,9 +28,20 @@ const closeModal = () => {
 };
 
 //Updat Role
-const updateRole = () => {
-	console.log('Updating role:', roleToEdit.value);
-	closeModal();
+const updateRole = async (newRole) => {
+	// console.log(newRole.id);
+	const res = await api.put(`/roles/${newRole.id}`, {
+		id: newRole.id,
+		name: newRole.name,
+	});
+	
+	if (res.status === 200) {
+		toast.success(res.data.message);
+		fetchRoles();
+		closeModal();
+	} else {
+		toast.error(res.data.message);
+	}
 };
 
 // Fetch Roles
@@ -46,34 +60,34 @@ const fetchRoles = async (url) => {
 	}
 };
 
-
-
 onMounted(() => {
 	fetchRoles();
 });
 </script>
 
 <template>
-	<div class="flex justify-between items-center mb-8">
-		<div>
-			<h2>Role Lists</h2>
-			<p>Manage your users Role Lists</p>
-		</div>
-		<RouterLink to="/roles/create"
-			class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
-			Create Role
-		</RouterLink>
-	</div>
-	<div>
-		<table class="container relative mx-auto ">
-			<thead class="bg-lemon-500">
-						<th class="border  border-gray-300 px-6  py-4">Sl</th>
-						<th class="border border-gray-300 px-6 py-4">Name</th>
-						<th class="border border-gray-300 px-6 py-4">Action</th>
-					</thead>
-			<tbody class="text-sm text-gray-700 divide-y divide-gray-100">
+	<PageHeading
+		title="Role Lists"
+		subTitle="Manage your users Role Lists"
+		btnText="Role"
+		to="/roles/create"
+	/>
+	<div class="overflow-x-auto rounded-lg shadow-md">
+		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
+			<thead class="bg-gray-100 text-gray-700 uppercase">
+				<tr class="text-center">
+					<th class="px-6 py-4">SL.</th>
+					<th class="px-6 py-4">Role Name</th>
+					<th class="px-6 py-4">Action</th>
+				</tr>
+			</thead>
+			<tbody>
 				<template v-if="!roles.data || roles.data.length === 0">
-					<tr v-for="n in 5" :key="n" class="odd:bg-white  even:bg-gray-50 hover:bg-gray-100 transition">
+					<tr
+						v-for="n in 5"
+						:key="n"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+					>
 						<td class="px-6 py-4">
 							<div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
 						</td>
@@ -90,22 +104,27 @@ onMounted(() => {
 				</template>
 
 				<template v-else>
-					
-					
-					<tr  v-for="role in roles.data" :key="role?.id"
-						class="odd:bg-white border even:bg-gray-50 hover:bg-gray-100 transition">
-						<td class="border border-gray-300 px-6 py-4">{{ role?.id }}</td>
-						<td class="border border-gray-300 px-6 py-4 font-medium">{{ role?.name }}</td>
-						<td class="border border-gray-300 px-6 py-4">
-							<div class="flex items-center gap-3">
-								<button @click="editRole(role)"
-									class="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition cursor-pointer"
-									title="Edit">
+					<tr
+						v-for="role in roles.data"
+						:key="role?.id"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center"
+					>
+						<td class="px-6 py-4">{{ role?.id }}</td>
+						<td class="px-6 py-4 font-medium">{{ role?.name }}</td>
+						<td class="px-6 py-4">
+							<div class="flex items-center justify-center gap-3">
+								<button
+									@click="editRole(role)"
+									class="p-2 rounded-md bg-gray-100 hover:bg-bg transition cursor-pointer text-center"
+									title="Edit"
+								>
 									<UserRoundPen class="text-gray-600 w-4 h-4" />
 								</button>
-								<button @click="deleteItem(role?.id)"
-									class="p-2 rounded-md bg-red-100 hover:bg-red-200 transition cursor-pointer"
-									title="Delete">
+								<button
+									@click="deleteItem(role?.id)"
+									class="p-2 rounded-md bg-red-100 hover:bg-red-200 transition cursor-pointer text-center"
+									title="Delete"
+								>
 									<Trash2 class="text-red-600 w-4 h-4" />
 								</button>
 							</div>
@@ -113,14 +132,20 @@ onMounted(() => {
 					</tr>
 				</template>
 			</tbody>
-			<Modal v-if="isOpen" :isOpen="isOpen" :role="roleToEdit" :closeModal="closeModal"
-				:updateRole="updateRole" />
+			<Modal
+				v-if="isOpen"
+				:isOpen="isOpen"
+				:role="roleToEdit"
+				:closeModal="closeModal"
+				:updateRole="updateRole"
+			/>
 		</table>
 	</div>
 	<!-- pagination -->
-	<Pagination 
-	:items="roles" :fetchData="fetchRoles"
-	 />
+	<Pagination
+		:items="roles"
+		:fetchData="fetchRoles"
+	/>
 </template>
 <style scoped>
 .slide-fade-enter-active {

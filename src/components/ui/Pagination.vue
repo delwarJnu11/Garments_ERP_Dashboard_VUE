@@ -64,11 +64,11 @@ console.log(props.items)
 					<a
 						v-for="link in items.links"
 						:key="link.label"
-						@click.prevent="fetchData(link.url)"
+						@click.prevent="props.fetchData(link.url)"
 						:class="[
 							'relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 md:inline-flex cursor-pointer',
 							link.active
-								? 'z-5 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+								? 'z-10 bg-primary text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary'
 								: 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0',
 							items.last_page === items.current_page &&
 							fixedPrevNext(link.label) === 'Next'
@@ -84,4 +84,4 @@ console.log(props.items)
 	</div>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

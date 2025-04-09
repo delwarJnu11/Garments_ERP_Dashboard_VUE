@@ -1,26 +1,26 @@
 <script setup>
 import { api } from '@/api';
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import Pagination from '../ui/Pagination.vue';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
-import { RouterLink } from 'vue-router';
+import PageHeading from '../ui/PageHeading.vue';
 
 const categories = ref([]);
 
-const fetchCategories = () => {
-	//   api.get('/categories')
-	axios.get('http://localhost/LARAVEL/garment-manufacturing-erp/public/vue/categories')
-		.then((result) => {
-			// console.log(result.data.categories);
-			categories.value = result.data.categories;
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+const fetchCategories = (url = '/categories') => {
+  if (!url) return;
+
+  api.get(url)
+    .then((result) => {
+      console.log(result.data.categories.links);
+      categories.value = result.data.categories;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-
+// console.log(categories.links)
 
 onMounted(() => {
 	fetchCategories();
@@ -29,98 +29,96 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="flex justify-between items-center mb-8">
-		<div>
-			<h2>Role Lists</h2>
-			<p>Manage your users Role Lists</p>
-		</div>
-		<RouterLink to="/categories/create"
-			class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
-			Create Role
-		</RouterLink>
-	</div>
-	<div>
-		<table class="container relative mx-auto ">
-			<!-- <thead class="bg-lemon-500">
-				<th class="border  border-gray-300 px-6  py-4">Sl</th>
-				<th class="border border-gray-300 px-6 py-4">Name</th>
-				<th class="border border-gray-300 px-6 py-4">is Raw Material</th>
-				<th class="border border-gray-300 px-6 py-4">Action</th>
-			</thead> -->
-			<tbody class="text-sm text-gray-700 divide-y divide-gray-100">
-				<!-- <template v-if="!categories.data || categories.data.length === 0" >
-					<tr v-for="n in 5" :key="n" class="odd:bg-white  even:bg-gray-50 hover:bg-gray-100 transition">
-						<td class="px-6 py-4">
+	<PageHeading
+		title="Category Lists"
+		subTitle="Manage your users Role Lists"
+		btnText="Category"
+		to="/categories/create"
+	/>
+	<div class="overflow-x-auto rounded-lg shadow-md">
+		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
+			<thead class="bg-primary text-white uppercase">
+				<tr class="text-center">
+					<th class="px-6 py-4">SL.</th>
+					<th class="px-6 py-4">Category Name</th>
+					<th class="px-6 py-4">Is Raw Materials</th>
+					<th class="px-6 py-4">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<template v-if="!categories.data || categories.data.length === 0">
+					<tr
+						v-for="n in 5"
+						:key="n"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+					>
+						<td class="px-6 py-4 border border-gray-200">
 							<div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
 						</td>
-						<td class="px-6 py-4">
+						<td class="px-6 py-4 border border-gray-200">
 							<div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
 						</td>
-						<td class="px-6 py-4">
+						<td class="px-6 py-4 border border-gray-200">
 							<div class="flex items-center gap-3">
 								<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
 								<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
 							</div>
 						</td>
-						<td class="px-6 py-4">
+						<td class="px-6 py-4 border border-gray-200">
 							<div class="flex items-center gap-3">
 								<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
 								<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
 							</div>
 						</td>
 					</tr>
-				</template> -->
+				</template>
 
-				<!-- <template v-else> -->
-				<div>
-					<!-- Debug: show all data -->
-					<!-- <pre>{{ categories }}</pre> -->
-
-					<!-- Your table for categories -->
-					<table class="min-w-full">
-						<thead class="bg-lemon-500">
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="category in categories.data" :key="category.id"
-								class="odd:bg-white border even:bg-gray-50 hover:bg-gray-100 transition">
-								<td class="border border-gray-300 px-6 py-4">{{ category.id }}</td>
-								<td class="border border-gray-300 px-6 py-4 font-medium">
-									{{ category.name }}
-								</td>
-								<td class="border border-gray-300 px-6 py-4">
-							<div class="flex items-center gap-3">
-								<button 
-									class="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition cursor-pointer"
-									title="Edit">
+				<template v-else>
+					<tr
+						v-for="category in categories.data"
+						:key="category?.id"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center"
+					>
+						<td class="px-6 py-4 border border-gray-200">{{ category?.id }}</td>
+						<td class="px-6 py-4 border border-gray-200 fborder border-gray-200ont-medium">{{ category?.name }}</td>
+						<td class="px-6 py-4 border border-gray-200 font-medium">{{ category?.is_raw_material }}</td>
+						<td class="px-6 py-4 border border-gray-200">
+							<div class="flex items-center justify-center gap-3">
+								<button
+									@click="editRole(role)"
+									class="p-2 rounded-md bg-gray-100 hover:bg-bg transition cursor-pointer text-center"
+									title="Edit"
+								>
 									<UserRoundPen class="text-gray-600 w-4 h-4" />
 								</button>
-								<button 
-									class="p-2 rounded-md bg-red-100 hover:bg-red-200 transition cursor-pointer"
-									title="Delete">
+								<button
+									@click="deleteItem(role?.id)"
+									class="p-2 rounded-md bg-red-100 hover:bg-red-200 transition cursor-pointer text-center"
+									title="Delete"
+								>
 									<Trash2 class="text-red-600 w-4 h-4" />
 								</button>
 							</div>
 						</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<!-- </template> -->
-
+					</tr>
+				</template>
 			</tbody>
-			<Modal />
+			<!-- <Modal
+				v-if="isOpen"
+				:isOpen="isOpen"
+				:role="roleToEdit"
+				:closeModal="closeModal"
+				:updateRole="updateRole"
+			/> -->
 		</table>
 	</div>
 	<!-- pagination -->
 	<Pagination
-	:items="categories" :fetchData="fetchCategories"
-	 />
+		:items="categories"
+		:fetchData="fetchCategories"
+	/>
 </template>
+
 
 
 

@@ -4,15 +4,16 @@
   <h1 class="text-xl font-semibold text-white bg-purple-700 py-3 px-4 rounded-t-md">
     Add Category
   </h1>
-
   <!-- Form Section -->
-  <form class="p-4">
+
+  <form @submit.prevent="submitData" class="p-4">
     <!-- Category Name -->
     <div class="mb-4">
       <label class="block text-gray-700 font-medium mb-2" for="categoryName">
         Category Name
       </label>
       <input
+      v-model="categoryData.name"
         type="text"
         id="categoryName"
         name="categoryName"
@@ -27,6 +28,7 @@
         type="checkbox"
         id="isRawMaterial"
         name="isRawMaterial"
+        v-model="categoryData.isRawMaterial"
         class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
       />
       <label class="ml-2 text-gray-700" for="isRawMaterial">
@@ -47,7 +49,39 @@
 </template>
 
 <script setup>
-  
+import { api } from '@/api';
+import axios from 'axios';
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+  const router = useRouter()
+    const categoryData = reactive({
+        name:"",
+        isRawMaterial:""
+    })
+
+
+    // const submitData=()=>{
+    //     api.post("/categories",categoryData)
+    //     .then((result) => {
+    //         console.log(result.data)
+    //         router.push({path:"/categories"})
+    //     }).catch((err) => {
+    //         console.log(err)
+
+    //     });
+    // } 
+    const submitData = () => {
+    api.post("/categories", categoryData)
+      .then((result) => {
+        console.log(result.data);
+        router.push({ path: "/categories" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
+
 </script>
 
 <style lang="scss" scoped>

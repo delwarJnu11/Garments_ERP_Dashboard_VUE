@@ -1,3 +1,25 @@
+<script setup>
+import { X } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
+
+const props = defineProps(['role', 'closeModal', 'updateRole', 'isOpen']);
+
+const localRole = ref({ ...props.role });
+
+// Watch modal open and reset role
+watch(
+	() => props.isOpen,
+	(isOpen) => {
+		if (isOpen) {
+			localRole.value = { ...props.role };
+		}
+	}
+);
+
+const submit = () => {
+	props.updateRole({ ...localRole.value });
+};
+</script>
 <template>
 	<!-- Backdrop -->
 	<Transition name="slide-fade">
@@ -27,7 +49,7 @@
 					</button>
 					<button
 						@click="submit"
-						class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
+						class="px-4 py-2 bg-primary text-white rounded hover:bg-secondary cursor-pointer"
 					>
 						Update
 					</button>
@@ -45,7 +67,7 @@
 	</Transition>
 </template>
 
-<script setup>
+<!-- <script setup>
 // Receive props
 const props = defineProps(['role', 'closeModal', 'updateRole', 'isOpen']);
 
@@ -68,7 +90,7 @@ watch(
 const submit = () => {
 	props.updateRole(localRole.value);
 };
-</script>
+</script> -->
 
 <style scoped>
 .slide-fade-enter-active {
