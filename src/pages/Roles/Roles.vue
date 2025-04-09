@@ -72,9 +72,16 @@ onMounted(() => {
 			Create Role
 		</RouterLink>
 	</div>
-	<div>
-		<table class="container mx-auto">
-			<tbody class="text-sm text-gray-700 divide-y divide-gray-100">
+	<div class="overflow-x-auto rounded-lg shadow-md">
+		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
+			<thead class="bg-gray-100 text-gray-700 uppercase">
+				<tr>
+					<th class="px-6 py-4">SL.</th>
+					<th class="px-6 py-4">Role Name</th>
+					<th class="px-6 py-4">Action</th>
+				</tr>
+			</thead>
+			<tbody>
 				<template v-if="!roles.data || roles.data.length === 0">
 					<tr
 						v-for="n in 5"
@@ -100,7 +107,7 @@ onMounted(() => {
 					<tr
 						v-for="role in roles.data"
 						:key="role?.id"
-						class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition"
 					>
 						<td class="px-6 py-4">{{ role?.id }}</td>
 						<td class="px-6 py-4 font-medium">{{ role?.name }}</td>
