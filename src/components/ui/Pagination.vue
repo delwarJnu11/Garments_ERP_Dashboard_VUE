@@ -1,10 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { fixedPrevNext } from './../../utils/fixedPrevNext';
 
-const props = defineProps(['items', 'fixedPrevNext', 'fetchData']);
-
+const props = defineProps(['items', 'fetchData']);
 const items = ref({ ...props.items });
-
 watch(
 	() => props.items,
 	(newVal) => {
@@ -67,15 +66,15 @@ watch(
 						:class="[
 							'relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 md:inline-flex cursor-pointer',
 							link.active
-								? 'z-10 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+								? 'z-5 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
 								: 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0',
 							items.last_page === items.current_page &&
-							props.fixedPrevNext(link.label) === 'Next'
+							fixedPrevNext(link.label) === 'Next'
 								? 'opacity-50'
 								: '',
 						]"
 					>
-						{{ props.fixedPrevNext(link.label) }}
+						{{ fixedPrevNext(link.label) }}
 					</a>
 				</nav>
 			</div>

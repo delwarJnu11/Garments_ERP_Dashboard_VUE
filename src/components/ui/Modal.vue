@@ -1,6 +1,6 @@
 <template>
 	<!-- Backdrop -->
-	<transition name="slide-fade">
+	<Transition name="slide-fade">
 		<div
 			class="fixed inset-0 bg-black/60 flex justify-center items-center"
 			@click.self="closeModal"
@@ -42,7 +42,7 @@
 				</button>
 			</div>
 		</div>
-	</transition>
+	</Transition>
 </template>
 
 <script setup>
@@ -72,7 +72,7 @@ const submit = () => {
 
 <style scoped>
 .slide-fade-enter-active {
-	transition: all 0.3s ease-out;
+	transition: all 1s ease-out;
 }
 
 .slide-fade-leave-active {
@@ -81,7 +81,7 @@ const submit = () => {
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-	transform: translateX(20px);
+	transform: translateX(-20px);
 	opacity: 0;
 }
 </style>
