@@ -1,9 +1,9 @@
 <script setup>
-import { LayoutDashboard } from 'lucide-vue-next';
-import { ref } from 'vue';
-import OrdersBuyers from '../moduleMenu/OrdersBuyers.vue';
-import Production from '../moduleMenu/Production.vue';
-import Users from '../moduleMenu/Users.vue';
+import { LayoutDashboard } from "lucide-vue-next";
+import { ref } from "vue";
+import OrdersBuyers from "../moduleMenu/OrdersBuyers.vue";
+import Production from "../moduleMenu/Production.vue";
+import Users from "../moduleMenu/Users.vue";
 
 const isSidebarOpen = ref(true);
 
@@ -18,32 +18,27 @@ const toggleMenu = (menu) => {
 <template>
 	<aside
 		:class="isSidebarOpen ? 'w-64' : 'w-20'"
-		class="bg-[#3572EF] text-white shadow-md transition-all duration-300 ease-in-out w-64 h-screen overflow-y-auto"
-	>
+		class="bg-primary text-white shadow-md transition-all duration-300 ease-in-out w-64 h-screen overflow-y-auto">
 		<div class="flex items-center justify-between px-4 py-3">
 			<h2
 				v-if="isSidebarOpen"
-				class="text-xl font-semibold"
-			>
+				class="text-xl font-semibold">
 				Dashboard
 			</h2>
 			<button
 				@click="isSidebarOpen = !isSidebarOpen"
-				class="p-2 focus:outline-none"
-			>
+				class="p-2 focus:outline-none">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
-					class="w-6 h-6"
-				>
+					class="w-6 h-6">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						stroke-width="2"
-						d="M4 6h16M4 12h16m-7 6h7"
-					/>
+						d="M4 6h16M4 12h16m-7 6h7" />
 				</svg>
 			</button>
 		</div>
@@ -56,8 +51,7 @@ const toggleMenu = (menu) => {
 						class="flex items-center gap-2 p-2 text-white hover:bg-gray-200 hover:text-black"
 						><LayoutDashboard
 							:color="'currentColor'"
-							class="w-5 h-5"
-						/>
+							class="w-5 h-5" />
 						Dashboard</RouterLink
 					>
 				</li>
@@ -65,18 +59,15 @@ const toggleMenu = (menu) => {
 				<!-- User Management -->
 				<Users
 					:activeMenu="activeMenu"
-					:toggleMenu="toggleMenu"
-				/>
+					:toggleMenu="toggleMenu" />
 				<!-- Production Management -->
 				<Production
 					:activeMenu="activeMenu"
-					:toggleMenu="toggleMenu"
-				/>
+					:toggleMenu="toggleMenu" />
 				<!-- Orders & Buyers -->
 				<OrdersBuyers
 					:activeMenu="activeMenu"
-					:toggleMenu="toggleMenu"
-				/>
+					:toggleMenu="toggleMenu" />
 			</ul>
 		</nav>
 	</aside>
