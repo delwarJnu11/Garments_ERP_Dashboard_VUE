@@ -6,10 +6,12 @@ const props = defineProps(['items', 'fetchData']);
 const items = ref({ ...props.items });
 watch(
 	() => props.items,
+	
 	(newVal) => {
 		items.value = { ...newVal };
 	}
 );
+console.log(props.items)
 </script>
 
 <template>
@@ -62,7 +64,7 @@ watch(
 					<a
 						v-for="link in items.links"
 						:key="link.label"
-						@click.prevent="fetchData(link.url)"
+						@click.prevent="props.fetchData(link.url)"
 						:class="[
 							'relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 md:inline-flex cursor-pointer',
 							link.active

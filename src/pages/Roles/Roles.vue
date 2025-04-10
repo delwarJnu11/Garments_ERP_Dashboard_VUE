@@ -18,6 +18,7 @@ const roleToEdit = ref({
 });
 const roleToDelete = ref('');
 
+
 // Edit Role
 const editRole = (role) => {
 	roleToEdit.value = { ...role };
@@ -37,7 +38,7 @@ const updateRole = async (newRole) => {
 		id: newRole.id,
 		name: newRole.name,
 	});
-	console.log(res);
+	
 	if (res.status === 200) {
 		toast.success(res.data.message);
 		fetchRoles();
