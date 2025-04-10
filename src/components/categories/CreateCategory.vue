@@ -60,17 +60,6 @@ import { useRouter } from 'vue-router';
         isRawMaterial:""
     })
 
-
-    // const submitData=()=>{
-    //     api.post("/categories",categoryData)
-    //     .then((result) => {
-    //         console.log(result.data)
-    //         router.push({path:"/categories"})
-    //     }).catch((err) => {
-    //         console.log(err)
-
-    //     });
-    // } 
     const submitData = () => {
     api.post("/categories", categoryData)
       .then((result) => {

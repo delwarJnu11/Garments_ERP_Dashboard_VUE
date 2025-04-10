@@ -52,22 +52,6 @@ const updateDate = () => {
 }
 
 
-
-// const updateDate = () => {
-//   // Update category, converting isRawMaterial to 1 or 0
-//   api.put(`/categories/${categoryData.id}`, {
-//     name: categoryData.name,
-//     id: categoryData.id,
-//     is_raw_material: categoryData.isRawMaterial ? 1 : 0
-//   })
-//   .then(res => {
-//     console.log(res.data);
-//     router.push('/categories');
-//   })
-//   .catch(err => {
-//     console.error('Error:', err.response ? err.response.data : err.message);
-//   });
-// }
 </script>
 <template>
     <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
@@ -95,12 +79,13 @@ const updateDate = () => {
  
      <!-- Is Raw Material -->
      <div class="mb-4 flex items-center">
-       <input
+     
+       <input   
          type="checkbox"
          id="isRawMaterial"
          name="isRawMaterial"
          v-model="categoryData.isRawMaterial"
-         class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+         class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 "
        />
        <label class="ml-2 text-gray-700" for="isRawMaterial">
          Check if this is a raw material.

@@ -15,7 +15,6 @@ const toggleMenu = (menu) => {
 	activeMenu.value = activeMenu.value === menu ? null : menu;
 };
 </script>
-
 <template>
 	<aside
 		:class="isSidebarOpen ? 'w-64' : 'w-20'"

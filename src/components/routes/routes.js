@@ -8,6 +8,8 @@ import User from '@/pages/User.vue';
 import Category from '@/pages/Category.vue';
 import CreateCategory from '../categories/CreateCategory.vue';
 import UpdateCategory from '../categories/UpdateCategory.vue';
+import UserList from '../users/UserList.vue';
+import CreateUser from '../users/CreateUser.vue';
 
 const routes = [
 	{
@@ -39,6 +41,10 @@ const routes = [
 				component: User,
 			},
 			{
+				path: '/users/create',
+				component: CreateUser,
+			},
+			{
 				path: '/categories',
 				component: Category,
 			},
@@ -50,6 +56,7 @@ const routes = [
 				path: '/categories/edit/:id',
 				component: UpdateCategory,
 			},
+			
 			
 		],
 	},
