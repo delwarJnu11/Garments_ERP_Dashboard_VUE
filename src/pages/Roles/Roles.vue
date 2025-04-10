@@ -1,5 +1,6 @@
 <script setup>
 import { api } from '@/api';
+import ConfirmDeleteModal from '@/components/ui/ConfirmDeleteModal.vue';
 import Modal from '@/components/ui/Modal.vue';
 import PageHeading from '@/components/ui/PageHeading.vue';
 import Pagination from '@/components/ui/Pagination.vue';
@@ -10,10 +11,12 @@ import { toast } from 'vue3-toastify';
 const roles = ref([]);
 const search = ref('');
 const isOpen = ref(false);
+const isConfirmDelete = ref(false);
 const roleToEdit = ref({
 	id: null,
 	name: '',
 });
+const roleToDelete = ref('');
 
 // Edit Role
 const editRole = (role) => {
@@ -24,6 +27,7 @@ const editRole = (role) => {
 // Modal Close
 const closeModal = () => {
 	isOpen.value = false;
+	isConfirmDelete.value = false;
 };
 
 //Updat Role
@@ -38,6 +42,25 @@ const updateRole = async (newRole) => {
 		toast.success(res.data.message);
 		fetchRoles();
 		closeModal();
+	} else {
+		toast.error(res.data.message);
+	}
+};
+
+// Handle Delete
+const handleDelete = (id) => {
+	roleToDelete.value = id;
+	isConfirmDelete.value = true;
+};
+
+// handle confirm delete
+const handleConfirmDelete = async (id) => {
+	const res = await api.delete(`/roles/${id}`);
+	console.log(res);
+	if (res.status === 200) {
+		toast.success(res.data.message);
+		closeModal();
+		fetchRoles();
 	} else {
 		toast.error(res.data.message);
 	}
@@ -122,7 +145,7 @@ onMounted(() => {
 									<UserRoundPen class="text-gray-600 w-4 h-4" />
 								</button>
 								<button
-									@click="deleteItem(role?.id)"
+									@click="handleDelete(role?.id)"
 									class="p-2 rounded-md bg-red-100 hover:bg-red-200 transition cursor-pointer text-center"
 									title="Delete"
 								>
@@ -139,6 +162,12 @@ onMounted(() => {
 				:role="roleToEdit"
 				:closeModal="closeModal"
 				:updateRole="updateRole"
+			/>
+			<ConfirmDeleteModal
+				v-if="isConfirmDelete"
+				:id="roleToDelete"
+				:closeModal="closeModal"
+				@confirmDelete="handleConfirmDelete"
 			/>
 		</table>
 	</div>

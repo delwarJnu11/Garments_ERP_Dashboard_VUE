@@ -67,31 +67,6 @@ const submit = () => {
 	</Transition>
 </template>
 
-<!-- <script setup>
-// Receive props
-const props = defineProps(['role', 'closeModal', 'updateRole', 'isOpen']);
-
-import { X } from 'lucide-vue-next';
-
-// Local role data to edit
-import { ref, watch } from 'vue';
-const localRole = ref({ ...props.role });
-const showModal = ref(props.isOpen);
-
-// Watch for changes in prop and update localRole
-watch(
-	() => props.role,
-	(newVal) => {
-		localRole.value = { ...newVal };
-	}
-);
-
-// Submit updated data to parent
-const submit = () => {
-	props.updateRole(localRole.value);
-};
-</script> -->
-
 <style scoped>
 .slide-fade-enter-active {
 	transition: all 1s ease-out;
