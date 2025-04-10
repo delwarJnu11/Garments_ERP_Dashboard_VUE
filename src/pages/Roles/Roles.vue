@@ -18,7 +18,6 @@ const roleToEdit = ref({
 });
 const roleToDelete = ref('');
 
-
 // Edit Role
 const editRole = (role) => {
 	roleToEdit.value = { ...role };
@@ -38,7 +37,7 @@ const updateRole = async (newRole) => {
 		id: newRole.id,
 		name: newRole.name,
 	});
-	
+
 	if (res.status === 200) {
 		toast.success(res.data.message);
 		fetchRoles();
@@ -68,7 +67,7 @@ const handleConfirmDelete = async (id) => {
 };
 
 // Fetch Roles
-const fetchRoles = async (url) => {
+const fetchRoles = async (url = '/roles') => {
 	if (typeof url != 'string') {
 		url = '/roles';
 	}
@@ -79,7 +78,7 @@ const fetchRoles = async (url) => {
 			roles.value = res.data.roles;
 		}
 	} catch (error) {
-		console.error('Error fetching roles:', error);
+		toast.error(error.message);
 	}
 };
 
