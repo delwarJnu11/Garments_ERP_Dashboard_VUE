@@ -1,5 +1,6 @@
 import './assets/main.css';
 
+import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import { createApp } from 'vue';
 import Vue3Toastify from 'vue3-toastify';
@@ -8,6 +9,7 @@ import App from './App.vue';
 import { router } from './components/routes/routes';
 
 createApp(App)
+	.use(createPinia())
 	.use(PrimeVue)
 	.use(router)
 	.use(Vue3Toastify, {
