@@ -4,11 +4,14 @@ import ConfirmDeleteModal from '@/components/ui/ConfirmDeleteModal.vue';
 import Modal from '@/components/ui/Modal.vue';
 import PageHeading from '@/components/ui/PageHeading.vue';
 import Pagination from '@/components/ui/Pagination.vue';
+import TableLoading from '@/components/ui/TableLoading.vue';
+import { useRoleStore } from '@/store/RoleStore';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { toast } from 'vue3-toastify';
 
-const roles = ref([]);
+// const roles = ref([]);
 const search = ref('');
 const isOpen = ref(false);
 const isConfirmDelete = ref(false);
@@ -66,24 +69,12 @@ const handleConfirmDelete = async (id) => {
 	}
 };
 
-// Fetch Roles
-const fetchRoles = async (url = '/roles') => {
-	if (typeof url != 'string') {
-		url = '/roles';
-	}
-	try {
-		if (url !== null) {
-			const res = await api.get(url, { params: { search: search.value } });
-			// console.log(res.data.roles);
-			roles.value = res.data.roles;
-		}
-	} catch (error) {
-		toast.error(error.message);
-	}
-};
+const roleStore = useRoleStore();
+const { error, loading, roles } = storeToRefs(roleStore);
+const { fetchRoles } = roleStore;
 
-onMounted(() => {
-	fetchRoles();
+onMounted(async () => {
+	await fetchRoles();
 });
 </script>
 
@@ -94,6 +85,11 @@ onMounted(() => {
 		btnText="Role"
 		to="/roles/create"
 	/>
+	<strong
+		v-if="error"
+		class="bg-red-400 text-dark"
+		>{{ error }}</strong
+	>
 	<div class="overflow-x-auto rounded-lg shadow-md">
 		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
 			<thead class="bg-primary text-white uppercase">
@@ -104,28 +100,11 @@ onMounted(() => {
 				</tr>
 			</thead>
 			<tbody>
-				<template v-if="!roles.data || roles.data.length === 0">
-					<tr
-						v-for="n in 5"
-						:key="n"
-						class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
-					>
-						<td class="px-6 py-4">
-							<div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
-						</td>
-						<td class="px-6 py-4">
-							<div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-						</td>
-						<td class="px-6 py-4">
-							<div class="flex items-center gap-3">
-								<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
-								<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
-							</div>
-						</td>
-					</tr>
+				<template v-if="loading">
+					<TableLoading />
 				</template>
 
-				<template v-else>
+				<template v-if="!loading && roles?.data?.length">
 					<tr
 						v-for="role in roles.data"
 						:key="role?.id"
@@ -172,10 +151,7 @@ onMounted(() => {
 		</table>
 	</div>
 	<!-- pagination -->
-	<Pagination
-		:items="roles"
-		:fetchData="fetchRoles"
-	/>
+	<Pagination :items="roleStore.roles" />
 </template>
 <style scoped>
 .slide-fade-enter-active {
