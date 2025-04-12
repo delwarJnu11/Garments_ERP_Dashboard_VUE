@@ -1,10 +1,11 @@
 <script setup>
-import { api } from '@/api';
+
 import { onMounted, ref } from 'vue';
 import Pagination from '../ui/Pagination.vue';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
 import PageHeading from '../ui/PageHeading.vue';
 import SearchModule from '../ui/SearchModule.vue';
+import api from '@/Api';
 
 const categories = ref([]);
 const search = ref('')

@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api';
+import Api from '@/Api';
 import Modal from '@/components/ui/Modal.vue';
 import PageHeading from '@/components/ui/PageHeading.vue';
 import Pagination from '@/components/ui/Pagination.vue';
@@ -30,7 +30,7 @@ const closeModal = () => {
 //Updat Role
 const updateRole = async (newRole) => {
 	// console.log(newRole.id);
-	const res = await api.put(`/roles/${newRole.id}`, {
+	const res = await Api.put(`/roles/${newRole.id}`, {
 		id: newRole.id,
 		name: newRole.name,
 	});

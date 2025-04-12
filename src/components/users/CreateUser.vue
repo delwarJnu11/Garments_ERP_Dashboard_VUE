@@ -1,7 +1,7 @@
 
 
 <script setup>
-import { api } from '@/api';
+import api from '@/Api';
 import { Password } from 'primevue';
 import { onMounted, reactive, ref } from 'vue';
 

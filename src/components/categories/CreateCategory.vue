@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { api } from '@/api';
+import api from '@/Api';
 import axios from 'axios';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';

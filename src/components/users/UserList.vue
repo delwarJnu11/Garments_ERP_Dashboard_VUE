@@ -1,10 +1,10 @@
 <script setup>
-import { api } from '@/api';
 import { onMounted, ref } from 'vue';
 import Pagination from '../ui/Pagination.vue';
 import SearchModule from '../ui/SearchModule.vue';
 import PageHeading from '../ui/PageHeading.vue';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
+import api from '@/Api';
 const users = ref([]);
 const search = ref('');
 const imgUrl = import.meta.env.VITE_IMG_BASE_URL

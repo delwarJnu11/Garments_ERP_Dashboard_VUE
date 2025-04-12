@@ -1,6 +1,6 @@
 
 <script setup>
-import { api } from '@/api';
+import api from '@/Api';
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 

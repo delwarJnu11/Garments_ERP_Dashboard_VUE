@@ -1,5 +1,5 @@
 <script setup>
-import { api } from '@/api';
+import Api from '@/Api';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
@@ -9,7 +9,7 @@ const name = ref('');
 
 const handleSubmit = async () => {
 	try {
-		const res = await api.post('/roles', {
+		const res = await Api.post('/roles', {
 			name: name.value,
 		});
 
