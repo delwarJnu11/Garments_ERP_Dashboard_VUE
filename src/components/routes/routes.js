@@ -9,6 +9,8 @@ import UpdateCategory from '../categories/UpdateCategory.vue';
 import Dashboard from '../dashboard/Dashboard.vue';
 import Layout from '../layout/Layout.vue';
 import OrderCreate from '../Order/OrderCreate.vue';
+import CreateUser from '../users/CreateUser.vue';
+import UpdateUser from '../users/UpdateUser.vue';
 
 const routes = [
 	{
@@ -40,6 +42,14 @@ const routes = [
 				component: User,
 			},
 			{
+				path: '/users/create',
+				component: CreateUser,
+			},
+			{
+				path: '/users/edit/:id',
+				component: UpdateUser,
+			},
+			{
 				path: '/categories',
 				component: Category,
 			},
@@ -51,6 +61,8 @@ const routes = [
 				path: '/categories/edit/:id',
 				component: UpdateCategory,
 			},
+			
+			
 			{
 				path: '/order/create',
 				component: OrderCreate,
