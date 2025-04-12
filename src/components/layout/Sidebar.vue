@@ -69,8 +69,8 @@ const toggleMenu = (menu) => {
 					:activeMenu="activeMenu"
 					:toggleMenu="toggleMenu" />
 					<!-- Inventory management -->
-					 <InventoryProducts :activeMenu="activeMenu"
-					 :toggleMenu="toggleMenu"/>
+				 <InventoryProducts :activeMenu="activeMenu"
+				 :toggleMenu="toggleMenu"/>
 			</ul>
 		</nav>
 	</aside>

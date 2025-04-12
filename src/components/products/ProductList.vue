@@ -1,81 +1,25 @@
-<script setup>
-import { api } from '@/api';
-import { onMounted, ref } from 'vue';
-import Pagination from '../ui/Pagination.vue';
-import SearchModule from '../ui/SearchModule.vue';
-import PageHeading from '../ui/PageHeading.vue';
-import { Trash2, UserRoundPen } from 'lucide-vue-next';
-import { toast } from 'vue3-toastify';
-import ConfirmDeleteModal from '../ui/ConfirmDeleteModal.vue';
-
-const users = ref([]);
-const search = ref('');
-const imgUrl = import.meta.env.VITE_IMG_BASE_URL;
-const userToDelete = ref(false);
-const isConfirmDelete = ref(false); // ✅ added this
-const closeModal = () => {
-	isConfirmDelete.value = false;
-};
-
-onMounted(() => {
-	fetchUsers();
-});
-
-const fetchUsers = async (url) => {
-	if (typeof url != 'string') {
-		url = '/users';
-	}
-	try {
-		if (url != null) {
-			const res = await api.get(url, { params: { search: search.value } });
-			users.value = res.data;
-		}
-	} catch (err) {
-		console.error('fetching error', err); // ✅ fixed console error variable
-	}
-};
-
-const handleDeleta = (id) => {
-	userToDelete.value = id;
-	isConfirmDelete.value = true;
-};
-
-const handleConfirmDelete = async (id) => {
-	try {
-		const res = await api.delete(`/users/${id}`);
-		if (res.status === 200) {
-			toast.success(res.data.message);
-			closeModal();
-			fetchUsers();
-		} else {
-			toast.error(res.data.message);
-		}
-	} catch (err) {
-		toast.error("Something went wrong while deleting.");
-		console.error(err);
-	}
-};
-</script>
-
-
 <template>
-	<SearchModule v-model="search" @input="fetchUsers" />
-	<PageHeading title="User Lists" subTitle="Manage your users User Lists" btnText="Category" to="/users/create" />
+	<SearchModule v-model="search" @input="fetchProducts" />
+	<PageHeading title="User Lists" subTitle="Manage your products User Lists" btnText="Category" to="/products/create" />
 
 	<div class="overflow-x-auto rounded-lg shadow-md">
 		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
 			<thead class="bg-primary text-white uppercase">
 				<tr class="text-center">
 					<th class="px-6 py-4">SL.</th>
-					<th class="px-6 py-4">Image</th>
-					<th class="px-6 py-4">User Name</th>
-					<th class="px-6 py-4">Email</th>
-					<th class="px-6 py-4">Role</th>
+					<!-- <th class="px-6 py-4">Image</th> -->
+					<th class="px-6 py-4"> Name</th>
+					<th class="px-6 py-4">Product Type</th>
+					<th class="px-6 py-4">Category </th>
+					<th class="px-6 py-4">Size </th>
+					<th class="px-6 py-4">SKU </th>
+					<th class="px-6 py-4">Quantity </th>
+					<th class="px-6 py-4">Unit Price </th>
 					<th class="px-6 py-4">Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				<template v-if="!users.data || users.data.length === 0">
+				<template v-if="!products.data || products.data.length === 0">
 					<tr v-for="n in 5" :key="n" class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition">
 						<td class="px-6 py-4 border border-gray-200">
 							<div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
@@ -105,21 +49,33 @@ const handleConfirmDelete = async (id) => {
 				</template>
 
 				<template v-else>
-					<tr v-for="user in users.data" :key="user?.id"
+					<tr v-for="product in products" :key="product?.id"
 						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center">
-						<td class="px-6 py-4 border border-gray-200">{{ user?.id }} </td>
-						<td class="px-6 py-4 border border-gray-200 text-center"><img :src="`${imgUrl}/users/${user.image}`" alt="User"
-							class="w-10 h-10 rounded-full object-cover mx-auto" /> </td>
-						<td class="px-6 py-4 border border-gray-200 fborder border-gray-200ont-medium">
+						<td class="px-6 py-4 border border-gray-200">{{ product?.id }} </td>
+						<!-- <td class="px-6 py-4 border border-gray-200 text-center"><img :src="`${imgUrl}/products/${product.image}`" alt="product"
+							class="w-10 h-10 rounded-full object-cover mx-auto" /> </td> -->
+						<td class="px-6 py-4 border border-gray-200  border-gray-200ont-medium">
 							
-							{{ user?.name }}
+							{{ product?.name }}
 						</td>
 						<!-- <td class="px-6 py-4 border border-gray-200 font-medium ">{{ category?.is_raw_material }}</td> -->
 						<td class="px-6 py-4 border border-gray-200">
-							{{ user?.email }}
+							{{ product?.product_type.name }}
 						</td>
 						<td class="px-6 py-4 border border-gray-200">
-							{{ user?.role.name }}
+							{{ product?.category_type.name }}
+						</td>
+						<td class="px-6 py-4 border border-gray-200">
+							{{ product?.size?.name || "N/A" }}
+						</td>
+						<td class="px-6 py-4 border border-gray-200">
+							{{ product?.sku }}
+						</td>
+						<td class="px-6 py-4 border border-gray-200">
+							{{ product?.unit_price }}
+						</td>
+						<td class="px-6 py-4 border border-gray-200">
+							{{ product?.uom.name }}
 						</td>
 
 						<td class="px-6 py-4 border border-gray-200">
@@ -127,11 +83,11 @@ const handleConfirmDelete = async (id) => {
 
 								<button
 									class="p-2 rounded-md bg-gray-100 hover:bg-bg transition cursor-pointer text-center">
-									<RouterLink :to="`/users/edit/${user.id}`">
+									<RouterLink :to="`/products/edit/${product.id}`">
 										<UserRoundPen class="text-gray-600 w-4 h-4" />
 									</RouterLink>
 								</button>
-								<button @click="handleDeleta(user?.id)"
+								<button @click="handleDeleta(product?.id)"
 									class="p-2 rounded-md bg-red-100 hover:bg-red-200 transition cursor-pointer text-center"
 									title="Delete">
 									<Trash2 class="text-red-600 w-4 h-4" />
@@ -148,17 +104,47 @@ const handleConfirmDelete = async (id) => {
 				:closeModal="closeModal"
 				:updateRole="updateRole"
 			/> -->
-			<ConfirmDeleteModal
+			<!-- <ConfirmDeleteModal
 			v-if="isConfirmDelete"
 			:id="userToDelete"
 			:close-modal="closeModel"
 			@confirmDelete="handleConfirmDelete"
 
-			/>
+			/> -->
 		</table>
 	</div>
 	<!-- pagination -->
-	<Pagination :items="users" :fetchData="fetchUsers" />
+	<!-- <Pagination :items="products" :fetchData="fetchproducts" /> -->
 </template>
 
-<style scoped></style>
+
+<script setup>
+import { useProductStore } from '@/store/ProductStore';
+import { Trash2, UserRoundPen } from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const productStore = useProductStore();
+const { error, loading, products } = storeToRefs(productStore);
+
+onMounted(() => {
+	productStore.fetchProducts();
+});
+    // const fetchProducts =()=>{
+    //     api.get('/products',{
+	// 		params:{
+	// 			search:search.value
+	// 		}
+	// 	})
+    //     .then(res=>{
+    //         console.log(res.data.products)
+    //         products.value=res.data.products
+    //     }).catch(err=>{
+    //         console.log(err)
+    //     })
+    // }
+</script>
+
+<style  scoped>
+
+</style>

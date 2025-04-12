@@ -54,6 +54,11 @@ const props = defineProps({
 						Categories
 					</RouterLink>
 				</li>
+				<li>
+					<RouterLink to="/products" class="block p-2 text-black hover:bg-gray-200 transition-all duration-300 ">
+					Products
+					</RouterLink>
+				</li>
 				<!-- <li>
 					<RouterLink
 						to="/orders/completed"
