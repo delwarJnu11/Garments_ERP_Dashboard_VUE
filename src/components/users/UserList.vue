@@ -19,7 +19,7 @@ const fetchUsers = async (url) => {
 	try {
 		if (url != null) {
 			const res = await api.get(url, { params: { search: search.value } })
-			console.log(res.data.data)
+			// console.log(res.data.data)
 			users.value = res.data
 		}
 	} catch (error) {

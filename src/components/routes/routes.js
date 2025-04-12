@@ -1,15 +1,16 @@
 import Login from '@/pages/Auth/Login.vue';
+import Category from '@/pages/Category.vue';
 import Create from '@/pages/Roles/Create.vue';
 import Roles from '@/pages/Roles/Roles.vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import Dashboard from '../dashboard/Dashboard.vue';
-import Layout from '../layout/Layout.vue';
 import User from '@/pages/User.vue';
-import Category from '@/pages/Category.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 import CreateCategory from '../categories/CreateCategory.vue';
 import UpdateCategory from '../categories/UpdateCategory.vue';
-import UserList from '../users/UserList.vue';
+import Dashboard from '../dashboard/Dashboard.vue';
+import Layout from '../layout/Layout.vue';
+import OrderCreate from '../Order/OrderCreate.vue';
 import CreateUser from '../users/CreateUser.vue';
+import UpdateUser from '../users/UpdateUser.vue';
 
 const routes = [
 	{
@@ -45,6 +46,10 @@ const routes = [
 				component: CreateUser,
 			},
 			{
+				path: '/users/edit/:id',
+				component: UpdateUser,
+			},
+			{
 				path: '/categories',
 				component: Category,
 			},
@@ -58,6 +63,10 @@ const routes = [
 			},
 			
 			
+			{
+				path: '/order/create',
+				component: OrderCreate,
+			},
 		],
 	},
 ];
