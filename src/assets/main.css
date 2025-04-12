@@ -1,6 +1,8 @@
 /* @import './base.css'; */
-@import 'tailwindcss';
+@import "tailwindcss";
 @theme {
-	--color-primary: #764abc;
-	--color-secondary: #eabad2;
+	--color-primary: #6c22a6;
+	--color-secondary: #6962ad;
+	--color-bg: #83c0c1;
+	--color-bg2: #96e9c6;
 }
