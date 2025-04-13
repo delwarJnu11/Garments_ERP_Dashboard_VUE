@@ -7,6 +7,7 @@ import Vue3Toastify from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import App from './App.vue';
 import { router } from './components/routes/routes';
+import { useAuthStore } from './store/AuthStore';
 
 createApp(App)
 	.use(createPinia())
@@ -20,3 +21,6 @@ createApp(App)
 		hideProgressBar: false,
 	})
 	.mount('#app');
+	const auth = useAuthStore();
+	auth.initAuth();
+
