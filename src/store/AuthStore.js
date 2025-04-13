@@ -22,6 +22,12 @@ export const useAuthStore = defineStore('auth', {
         console.error('Login API error:', error)
         throw error
       }
+    },
+    initAuth() {
+      if (this.token) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+      }
     }
   }
+ 
 })
