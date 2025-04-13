@@ -27,43 +27,43 @@ const routes = [
 				component: Dashboard,
 			},
 			{
-				path: 'roles',
+				path: '/roles',
 				component: Roles,
 			},
 			{
-				path: 'roles/create',
+				path: '/roles/create',
 				component: Create,
 			},
 			{
-				path: 'users',
+				path: '/users',
 				component: User,
 			},
 			{
-				path: 'users/create',
+				path: '/users/create',
 				component: CreateUser,
 			},
 			{
-				path: 'users/edit/:id',
+				path: '/users/edit/:id',
 				component: UpdateUser,
 			},
 			{
-				path: 'categories',
+				path: '/categories',
 				component: Category,
 			},
 			{
-				path: 'categories/create',
+				path: '/categories/create',
 				component: CreateCategory,
 			},
 			{
-				path: 'categories/edit/:id',
+				path: '/categories/edit/:id',
 				component: UpdateCategory,
 			},
 			{
-				path: 'order/create',
+				path: '/order/create',
 				component: OrderCreate,
 			},
 			{
-				path: 'products',
+				path: '/products',
 				component: ProductList,
 			}
 		],

@@ -1,3 +1,37 @@
+
+
+
+<script setup>
+import { useProductStore } from '@/store/ProductStore';
+import { Trash2, UserRoundPen } from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const productStore = useProductStore();
+// const { error, loading, products } = storeToRefs(productStore);
+
+// const {fetchProducts} =  productStore
+console.log(productStore)
+
+onMounted(async () => {
+	await productStore.fetchProducts();
+});
+    // const fetchProducts =()=>{
+    //     api.get('/products',{
+	// 		params:{
+	// 			search:search.value
+	// 		}
+	// 	})
+    //     .then(res=>{
+    //         console.log(res.data.products)
+    //         products.value=res.data.products
+    //     }).catch(err=>{
+    //         console.log(err)
+    //     })
+    // }
+</script>
+
+
 <template>
 	<SearchModule v-model="search" @input="fetchProducts" />
 	<PageHeading title="User Lists" subTitle="Manage your products User Lists" btnText="Category" to="/products/create" />
@@ -19,7 +53,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<template v-if="!products.data || products.data.length === 0">
+				<template v-if="!productStore.products || productStore.products.length === 0">
 					<tr v-for="n in 5" :key="n" class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition">
 						<td class="px-6 py-4 border border-gray-200">
 							<div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
@@ -49,8 +83,9 @@
 				</template>
 
 				<template v-else>
-					<tr v-for="product in products" :key="product?.id"
-						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center">
+					<tr v-for="product in productStore.products" :key="product?.id"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center" v-if= "!productStore.loading">
+						
 						<td class="px-6 py-4 border border-gray-200">{{ product?.id }} </td>
 						<!-- <td class="px-6 py-4 border border-gray-200 text-center"><img :src="`${imgUrl}/products/${product.image}`" alt="product"
 							class="w-10 h-10 rounded-full object-cover mx-auto" /> </td> -->
@@ -116,34 +151,6 @@
 	<!-- pagination -->
 	<!-- <Pagination :items="products" :fetchData="fetchproducts" /> -->
 </template>
-
-
-<script setup>
-import { useProductStore } from '@/store/ProductStore';
-import { Trash2, UserRoundPen } from 'lucide-vue-next';
-import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
-
-const productStore = useProductStore();
-const { error, loading, products } = storeToRefs(productStore);
-
-onMounted(() => {
-	productStore.fetchProducts();
-});
-    // const fetchProducts =()=>{
-    //     api.get('/products',{
-	// 		params:{
-	// 			search:search.value
-	// 		}
-	// 	})
-    //     .then(res=>{
-    //         console.log(res.data.products)
-    //         products.value=res.data.products
-    //     }).catch(err=>{
-    //         console.log(err)
-    //     })
-    // }
-</script>
 
 <style  scoped>
 
