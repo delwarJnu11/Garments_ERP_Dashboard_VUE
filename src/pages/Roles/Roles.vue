@@ -151,7 +151,10 @@ onMounted(async () => {
 		</table>
 	</div>
 	<!-- pagination -->
-	<Pagination :items="roleStore.roles" />
+	<Pagination
+		:items="roleStore.roles"
+		:fetchData="fetchRoles"
+	/>
 </template>
 <style scoped>
 .slide-fade-enter-active {
