@@ -1,9 +1,8 @@
 <script setup>
-import { useRoleStore } from '@/store/RoleStore';
 import { ref, watch } from 'vue';
 import { fixedPrevNext } from './../../utils/fixedPrevNext';
 
-const props = defineProps(['items']);
+const props = defineProps(['items', 'fetchData']);
 const items = ref({ ...props.items });
 watch(
 	() => props.items,
@@ -12,7 +11,6 @@ watch(
 		items.value = { ...newVal };
 	}
 );
-const roles = useRoleStore();
 </script>
 
 <template>
@@ -65,7 +63,7 @@ const roles = useRoleStore();
 					<a
 						v-for="link in items.links"
 						:key="link.label"
-						@click.prevent="roles.fetchRoles(link.url)"
+						@click.prevent="props.fetchData(link.url)"
 						:class="[
 							'relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 md:inline-flex cursor-pointer',
 							link.active

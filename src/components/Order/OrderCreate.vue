@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { useBuyerStore } from '@/store/buyerStore';
+import { onMounted } from 'vue';
 
-const buyers = ref([]);
-const supervisors = ref([]);
-const statuses = ref([]);
-const fabricsTypes = ref([]);
+const buyers = useBuyerStore();
+onMounted(async () => {
+	await buyers.fetchBuyers();
+});
 </script>
 
 <template>
@@ -32,12 +33,13 @@ const fabricsTypes = ref([]);
 						Select Buyer
 					</option>
 					<option
+						v-if="!buyers.loading"
+						v-for="buyer in buyers.buyers.data"
 						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
-						value="1"
+						:value="buyer.id"
 					>
-						Buyer A
+						{{ buyer?.first_name }} {{ buyer?.last_name }}
 					</option>
-					<option value="2">Buyer B</option>
 				</select>
 			</div>
 
