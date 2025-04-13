@@ -1,14 +1,35 @@
 <script setup>
+import { useAuthStore } from '@/store/AuthStore';
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const loginData = reactive({
 	email: '',
 	password: '',
 });
 
-const handleSubmit = () => {
-	console.log(loginData);
-};
+const auth = useAuthStore();
+
+const handleLogin = async () => {
+	try {
+		await auth.login(loginData)
+		router.push('/dashboard')
+	} catch (error) {
+		console.error('Login failed', error)
+	}
+}
+
+
+// const handleLogin = ()=>{
+// 	api.post('/login',loginData)
+// 	.then((result) => {
+// 		console.log(result)
+// 		router.push('/dashboard')
+// 	}).catch((err) => {
+		
+// 	});
+// }
 </script>
 
 <template>
@@ -23,7 +44,7 @@ const handleSubmit = () => {
 
 			<form
 				class="space-y-5"
-				@submit.prevent="handleSubmit"
+				@submit.prevent="handleLogin"
 			>
 				<!-- Email -->
 				<div>

@@ -9,6 +9,9 @@ import UpdateCategory from '../categories/UpdateCategory.vue';
 import Dashboard from '../dashboard/Dashboard.vue';
 import Layout from '../layout/Layout.vue';
 import OrderCreate from '../Order/OrderCreate.vue';
+import CreateUser from '../users/CreateUser.vue';
+import UpdateUser from '../users/UpdateUser.vue';
+import ProductList from '../products/ProductList.vue';
 
 const routes = [
 	{
@@ -20,11 +23,7 @@ const routes = [
 		component: Layout,
 		children: [
 			{
-				path: '/dashboard',
-				component: Dashboard,
-			},
-			{
-				path: '/dashboard',
+				path: '',
 				component: Dashboard,
 			},
 			{
@@ -38,6 +37,14 @@ const routes = [
 			{
 				path: '/users',
 				component: User,
+			},
+			{
+				path: '/users/create',
+				component: CreateUser,
+			},
+			{
+				path: '/users/edit/:id',
+				component: UpdateUser,
 			},
 			{
 				path: '/categories',
@@ -55,6 +62,10 @@ const routes = [
 				path: '/order/create',
 				component: OrderCreate,
 			},
+			{
+				path: '/products',
+				component: ProductList,
+			}
 		],
 	},
 ];

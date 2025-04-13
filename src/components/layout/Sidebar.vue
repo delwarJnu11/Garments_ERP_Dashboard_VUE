@@ -15,7 +15,6 @@ const toggleMenu = (menu) => {
 	activeMenu.value = activeMenu.value === menu ? null : menu;
 };
 </script>
-
 <template>
 	<aside
 		:class="isSidebarOpen ? 'w-64' : 'w-20'"
@@ -70,8 +69,8 @@ const toggleMenu = (menu) => {
 					:activeMenu="activeMenu"
 					:toggleMenu="toggleMenu" />
 					<!-- Inventory management -->
-					 <InventoryProducts :activeMenu="activeMenu"
-					 :toggleMenu="toggleMenu"/>
+				 <InventoryProducts :activeMenu="activeMenu"
+				 :toggleMenu="toggleMenu"/>
 			</ul>
 		</nav>
 	</aside>
