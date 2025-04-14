@@ -13,6 +13,7 @@ import CreateUser from '../users/CreateUser.vue';
 import UpdateUser from '../users/UpdateUser.vue';
 import ProductList from '../products/ProductList.vue';
 import { useAuthStore } from '@/store/AuthStore';
+import CreateProduct from '../products/CreateProduct.vue';
 
 const routes = [
 	{
@@ -39,6 +40,7 @@ const routes = [
 		{ path: '/categories/edit/:id', component: UpdateCategory },
 		{ path: '/order/create', component: OrderCreate },
 		{ path: '/products', component: ProductList },
+		{ path: '/products/create', component: CreateProduct },
 	  ],
 	},
   ];
