@@ -10,11 +10,8 @@ onMounted(async () => {
 
 <template>
 	<div class="container mx-auto bg-white p-8 rounded-xl shadow-md">
-		<!-- Form Title -->
 		<h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Order</h2>
-
 		<form class="grid grid-cols-1 md:grid-cols-2 gap-6">
-			<!-- Buyer -->
 			<div>
 				<label
 					for="buyer_id"
@@ -42,8 +39,6 @@ onMounted(async () => {
 					</option>
 				</select>
 			</div>
-
-			<!-- Supervisor -->
 			<div>
 				<label
 					for="supervisor_id"
@@ -60,8 +55,6 @@ onMounted(async () => {
 					<option value="2">Supervisor B</option>
 				</select>
 			</div>
-
-			<!-- Status -->
 			<div>
 				<label
 					for="status_id"
@@ -78,8 +71,6 @@ onMounted(async () => {
 					<option value="2">Approved</option>
 				</select>
 			</div>
-
-			<!-- Fabric Type -->
 			<div>
 				<label
 					for="fabric_type_id"
@@ -96,8 +87,6 @@ onMounted(async () => {
 					<option value="2">Polyester</option>
 				</select>
 			</div>
-
-			<!-- GSM -->
 			<div>
 				<label
 					for="gsm"
@@ -112,8 +101,6 @@ onMounted(async () => {
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				/>
 			</div>
-
-			<!-- Delivery Date -->
 			<div>
 				<label
 					for="delivery_date"
@@ -127,8 +114,6 @@ onMounted(async () => {
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				/>
 			</div>
-
-			<!-- Description (Full width) -->
 			<div class="md:col-span-2">
 				<label
 					for="description"
@@ -143,12 +128,10 @@ onMounted(async () => {
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				></textarea>
 			</div>
-
-			<!-- Submit Button (Full width on mobile, right aligned on desktop) -->
 			<div class="md:col-span-2 flex justify-end">
 				<button
 					type="submit"
-					class="px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition-all shadow-md"
+					class="px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition-all shadow-md cursor-pointer"
 				>
 					Submit Order
 				</button>

@@ -1,6 +1,6 @@
 <script setup>
 import { useAuthStore } from '@/store/AuthStore';
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -8,28 +8,35 @@ const loginData = reactive({
 	email: '',
 	password: '',
 });
+const rememberMe = ref(false);
 
 const auth = useAuthStore();
 
 const handleLogin = async () => {
 	try {
-		await auth.login(loginData)
-		router.push('/dashboard')
+		await auth.login(loginData);
+		if (rememberMe.value) {
+			localStorage.setItem('rememberMe', 'true');
+			localStorage.setItem('loginEmail', loginData.email);
+			localStorage.setItem('loginPassword', loginData.password);
+		} else {
+			localStorage.removeItem('rememberMe');
+			localStorage.removeItem('loginEmail');
+			localStorage.removeItem('loginPassword');
+		}
+		router.push('/dashboard');
 	} catch (error) {
-		console.error('Login failed', error)
+		console.error('Login failed', error);
 	}
-}
+};
 
-
-// const handleLogin = ()=>{
-// 	api.post('/login',loginData)
-// 	.then((result) => {
-// 		console.log(result)
-// 		router.push('/dashboard')
-// 	}).catch((err) => {
-		
-// 	});
-// }
+onMounted(() => {
+	if (localStorage.getItem('rememberMe') === 'true') {
+		loginData.email = localStorage.getItem('loginEmail') || '';
+		loginData.password = localStorage.getItem('loginPassword') || '';
+		rememberMe.value = true;
+	}
+});
 </script>
 
 <template>
@@ -85,6 +92,7 @@ const handleLogin = async () => {
 					<label class="inline-flex items-center">
 						<input
 							type="checkbox"
+							v-model="rememberMe"
 							class="form-checkbox text-blue-600"
 						/>
 						<span class="ml-2 text-sm text-gray-600">Remember me</span>
@@ -99,7 +107,7 @@ const handleLogin = async () => {
 				<!-- Login Button -->
 				<button
 					type="submit"
-					class="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+					class="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
 				>
 					Sign In
 				</button>
