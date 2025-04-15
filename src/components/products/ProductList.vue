@@ -1,11 +1,12 @@
 
-
-
 <script setup>
 import { useProductStore } from '@/store/ProductStore';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
+import SearchModule from '../ui/SearchModule.vue';
+import PageHeading from '../ui/PageHeading.vue';
+import Pagination from '../ui/Pagination.vue';
 
 const productStore = useProductStore();
 // const { error, loading, products } = storeToRefs(productStore);
@@ -14,27 +15,16 @@ const productStore = useProductStore();
 console.log(productStore)
 
 onMounted(async () => {
-	await productStore.fetchProducts();
+	await productStore.fetchProducts('/products');
 });
-    // const fetchProducts =()=>{
-    //     api.get('/products',{
-	// 		params:{
-	// 			search:search.value
-	// 		}
-	// 	})
-    //     .then(res=>{
-    //         console.log(res.data.products)
-    //         products.value=res.data.products
-    //     }).catch(err=>{
-    //         console.log(err)
-    //     })
-    // }
+
+
 </script>
 
 
 <template>
-	<SearchModule v-model="search" @input="fetchProducts" />
-	<PageHeading title="User Lists" subTitle="Manage your products User Lists" btnText="Category" to="/products/create" />
+	<SearchModule v-model="productStore.search" @input="productStore.fetchProducts" />
+	<PageHeading title="User Lists" subTitle="Manage your products  Lists" btnText="Products" to="/products/create" />
 
 	<div class="overflow-x-auto rounded-lg shadow-md">
 		<table class="min-w-full bg-white border border-gray-200 text-sm text-left">
@@ -132,13 +122,7 @@ onMounted(async () => {
 					</tr>
 				</template>
 			</tbody>
-			<!-- <Modal
-				v-if="isOpen"
-				:isOpen="isOpen"
-				:role="roleToEdit"
-				:closeModal="closeModal"
-				:updateRole="updateRole"
-			/> -->
+		
 			<!-- <ConfirmDeleteModal
 			v-if="isConfirmDelete"
 			:id="userToDelete"
@@ -149,7 +133,7 @@ onMounted(async () => {
 		</table>
 	</div>
 	<!-- pagination -->
-	<!-- <Pagination :items="products" :fetchData="fetchproducts" /> -->
+	<Pagination :data="productStore.products" :fetchData="productStore.fetchProducts" />
 </template>
 
 <style  scoped>
