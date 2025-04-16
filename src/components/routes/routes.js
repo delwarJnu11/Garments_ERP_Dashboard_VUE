@@ -14,6 +14,8 @@ import UpdateUser from '../users/UpdateUser.vue';
 import ProductList from '../products/ProductList.vue';
 import { useAuthStore } from '@/store/AuthStore';
 import CreateProduct from '../products/CreateProduct.vue';
+import Suppliers from '../suppliers/Suppliers.vue';
+
 
 const routes = [
 	{
@@ -41,6 +43,7 @@ const routes = [
 		{ path: '/order/create', component: OrderCreate },
 		{ path: '/products', component: ProductList },
 		{ path: '/products/create', component: CreateProduct },
+		{ path: '/suppliers', component: Suppliers },
 	  ],
 	},
   ];

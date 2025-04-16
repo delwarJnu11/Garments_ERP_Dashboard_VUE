@@ -2,8 +2,6 @@
 
 <script  setup>
 import { ChevronRight, ListOrdered } from 'lucide-vue-next';
-
-
 const props = defineProps({
     activeMenu:{
         type:String,
@@ -21,21 +19,21 @@ const props = defineProps({
 <template>
 	<li>
 		<button
-			@click="props.toggleMenu('inventory')"
-			class="flex items-center justify-between w-full p-3 hover:text-gray-700 hover:bg-gray-100 text-base transition-all duration-300"
+			@click="props.toggleMenu('purchase')"
+			class="flex items-center justify-between w-full p-3 hover:text-gray-700 hover:bg-gray-200 text-base transition-all duration-300"
 		>
 			<div class="flex items-center gap-2">
 				<ListOrdered
 					class="w-5 h-5"
 					:color="'currentColor'"
 				/>
-				<span>Inventory & Warehouse</span>
+				<span>Purchase & Suppliers</span>
 			</div>
 			<ChevronRight
 				:color="'currentColor'"
 				:class="{
-					'rotate-90 transition-transform': props.activeMenu === 'inventory',
-					'transition-transform': props.activeMenu !== 'inventory',
+					'rotate-90 transition-transform': props.activeMenu === 'purchase',
+					'transition-transform': props.activeMenu !== 'purchase',
 				}"
 				class="w-4 h-4"
 			/>
@@ -43,20 +41,20 @@ const props = defineProps({
 
 		<transition name="slide">
 			<ul
-				v-if="props.activeMenu === 'inventory'"
+				v-if="props.activeMenu === 'purchase'"
 				class="bg-white p-2 shadow-md"
 			>
 				<li>
 					<RouterLink
-						to="/categories"
+						to="/suppliers"
 						class="block p-2 rounded-md text-black hover:bg-purple-300 transition-all duration-300"
 					>
-						Categories
+						Suppliers
 					</RouterLink>
 				</li>
 				<li>
-					<RouterLink to="/products" class="block p-2 text-black hover:bg-purple-300 transition-all duration-300 ">
-					Products
+					<RouterLink to="/PurchaseInvoice" class="block p-2 text-black hover:bg-purple-300 transition-all duration-300 ">
+					Purchase Invoice
 					</RouterLink>
 				</li>
 				<!-- <li>

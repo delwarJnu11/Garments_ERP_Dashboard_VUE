@@ -5,10 +5,12 @@ import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import { computed } from 'vue';
 import { useCategoryStore } from '@/store/CategoryStore';
+import { api } from '@/api';
 
 const productJoinStore = useProductStore()
 const productTypeStore = useProductStore()
-// const productStore = useProductStore();
+const sizeStore = useProductStore()
+const uomStore = useProductStore();
 const categoryStore = useCategoryStore()
 const router = useRouter()
 const productData = reactive({
@@ -22,56 +24,28 @@ const productData = reactive({
     unit_price: ""
 });
 
+// get all from pinia store useProductStore
 
 onMounted(async () => {
     await productJoinStore.fetchProducts('/products');
     categoryStore.fetchCategory('/all-categories')
     productTypeStore.fetchProductType("/productTypes")
+    sizeStore.fetchSize("/sizes");
+    uomStore.fetchUom("/uoms")
 
 });
-
-
-
-// const categoryTypes = computed(() => {
-//   const types = productJoinStore.products.map(product => product.category_type);
-//   // Optional: remove duplicates based on id
-//   const uniqueTypes = types.filter(
-//     (type, index, self) =>
-//       index === self.findIndex(t => t.id === type.id)
-//   );
-//   return uniqueTypes;
-// });
-
-
-
 const handleSubmit = async () => {
     try {
         const res = await api.post("/products", productData)
         console.log(res.data)
-        if (res.data.status === 200) {
-            toast.success(res.data.message)
-            Object.keys(productData).forEach(key => {
-                productData[key] = "";
-            })
-            router.push("/products")
-        }
+        router.push("/products")
     } catch (error) {
         console.log("create product failed:", error);
         alert("Failed to create product: " + (error.response?.data?.message || error.message));
     }
 }
 
-// const handleSubmit = async () => {
-//     try {
-//         await productStore.createProduct(productData);
-//         alert("Product created successfully!");
-//         // Optionally reset the form
-//         Object.keys(productData).forEach(key => productData[key] = "");
-//         router.push("/products")
-//     } catch (error) {
-//         alert("Failed to create product. Check console.");
-//     }
-// }
+
 </script>
 <template>
     <div class="max-w-4xl  mx-auto bg-white p-8 shadow-md rounded-md mt-10">
@@ -118,8 +92,7 @@ const handleSubmit = async () => {
                     <select v-model="productData.size_id"
                         class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600">
                         <option value="">Select Size</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option v-for="size in sizeStore.sizes" :key="size.id" :value="size.id">{{ size.name }}</option>
                     </select>
                 </div>
                 <div>
@@ -137,8 +110,7 @@ const handleSubmit = async () => {
                     <select v-model="productData.uom_id"
                         class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600">
                         <option value="">Select User UOM</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option v-for="uom in uomStore.uoms" :key="uom.id" :value="uom.id">{{ uom.name }}</option>
                     </select>
                 </div>
 
