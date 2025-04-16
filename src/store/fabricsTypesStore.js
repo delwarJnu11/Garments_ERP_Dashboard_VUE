@@ -1,20 +1,23 @@
 import { api } from '@/api';
 import { defineStore } from 'pinia';
 
-export const useUserStore = defineStore('users', {
+export const useFabricsTypeStore = defineStore('fabricsTypes', {
 	state: () => ({
 		loading: false,
 		error: null,
-		users: [],
-		supervisors: [],
+		fabricsTypes: [],
 	}),
 	getters: {},
 	actions: {
-		async getSupervisors() {
+		async fetchFabrics() {
 			this.loading = true;
 			try {
-				const res = await api.get('/supervisors');
-				this.supervisors = res.data.superviosors;
+				const res = await api.get('/fabrics/types');
+				if (res.status === 200) {
+					this.fabricsTypes = res.data.fabrics;
+				} else {
+					this.error = res.data.message;
+				}
 			} catch (error) {
 				this.error = error.message;
 			} finally {
