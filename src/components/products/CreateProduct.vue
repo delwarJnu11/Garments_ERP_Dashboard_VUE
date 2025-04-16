@@ -1,16 +1,15 @@
-
-
 <script setup>
 import { useProductStore } from '@/store/ProductStore';
 import { onMounted, reactive } from 'vue';
-// import { useProductStore } from '@/store/ProductStore';
 import { useRouter } from 'vue-router';
-// import { api } from '@/api';
 import { toast } from 'vue3-toastify';
-
+import { computed } from 'vue';
+import { useCategoryStore } from '@/store/CategoryStore';
 
 const productJoinStore = useProductStore()
+const productTypeStore = useProductStore()
 // const productStore = useProductStore();
+const categoryStore = useCategoryStore()
 const router = useRouter()
 const productData = reactive({
     name: "",
@@ -23,30 +22,36 @@ const productData = reactive({
     unit_price: ""
 });
 
-onMounted(async()=>{
-  await productJoinStore.fetchProducts('/products');
-})
-// const categories = ref([]);
-// const productTypes = ref([]);
-// const sizes = ref([]);
-// const uoms = ref([]);
 
-// const productsJoinData = useProductStore()
-// console.log(productsJoinData )
-// onMounted(async()=>{
-//     await productsJoinData.fetchProducts('/products')
-   
-// })
+onMounted(async () => {
+    await productJoinStore.fetchProducts('/products');
+    categoryStore.fetchCategory('/all-categories')
+    productTypeStore.fetchProductType("/productTypes")
+
+});
 
 
-const handleSubmit = async()=>{
+
+// const categoryTypes = computed(() => {
+//   const types = productJoinStore.products.map(product => product.category_type);
+//   // Optional: remove duplicates based on id
+//   const uniqueTypes = types.filter(
+//     (type, index, self) =>
+//       index === self.findIndex(t => t.id === type.id)
+//   );
+//   return uniqueTypes;
+// });
+
+
+
+const handleSubmit = async () => {
     try {
-        const res = await api.post("/products",productData)
+        const res = await api.post("/products", productData)
         console.log(res.data)
-        if(res.data.status===200){
+        if (res.data.status === 200) {
             toast.success(res.data.message)
-            Object.keys(productData).forEach(key=>{
-                productData[key]= "";
+            Object.keys(productData).forEach(key => {
+                productData[key] = "";
             })
             router.push("/products")
         }
@@ -101,12 +106,9 @@ const handleSubmit = async()=>{
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Product Type</label>
                     <select v-model="productData.product_type_id"
-                  
-                   
                         class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600">
                         <option value="">Select product type</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option v-for="proType in productTypeStore.productTypes" :key="proType.id" :value="proType.id">{{ proType.name }}</option>
                     </select>
                 </div>
 
@@ -121,12 +123,13 @@ const handleSubmit = async()=>{
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Category Type</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
                     <select v-model="productData.category_type_id"
                         class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600">
-                        <option value="">Select Category Type</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option value="">Select Category</option>
+                        <option v-for="cat in categoryStore.categories" :key="cat.id" :value="cat.id">
+                            {{ cat.name }}
+                        </option>
                     </select>
                 </div>
                 <div>
@@ -174,9 +177,3 @@ const handleSubmit = async()=>{
 </template>
 
 <style lang="scss" scoped></style>
-
-
-
-
-
-

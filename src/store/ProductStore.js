@@ -12,7 +12,7 @@ export const useProductStore = defineStore('product', {
 		error: null,
 		loading: false,
 		product: null,
-		categories:[],
+		productTypes:[],
 	}),
 
 	actions: {
@@ -22,6 +22,19 @@ export const useProductStore = defineStore('product', {
 				const response = await api.get(url, { params: { search: this.search } });
 				this.products = response.data.products.data;
 				// this.categories = response.data.products
+				// console.log("Response data:", response.data);
+			} catch (error) {
+				this.error = error;
+			} finally {
+				this.loading = false;
+			}
+		},
+		async fetchProductType(url = '/productTypes') {
+			this.loading = true;
+			try {
+				const response = await api.get(url);
+				this.productTypes = response.data.productTypes;
+				// this.categories = response.data.products
 				console.log("Response data:", response.data);
 			} catch (error) {
 				this.error = error;
@@ -29,7 +42,9 @@ export const useProductStore = defineStore('product', {
 				this.loading = false;
 			}
 		}
+	
 	},
+		
 
 	// // store/ProductStore.js
 	// async createProduct(data) {
