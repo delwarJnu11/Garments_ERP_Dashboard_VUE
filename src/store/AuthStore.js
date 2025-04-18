@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', {
         this.user = res.data.user
 
         // Set expiry for 1 hour from now
-        const expiry = Date.now() + 60 * 60 * 2000
+        const expiry = Date.now() + 60 * 60 * 3000
 
         localStorage.setItem('token', this.token)
         localStorage.setItem('token_expiry', expiry)

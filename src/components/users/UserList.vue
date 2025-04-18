@@ -12,7 +12,7 @@ const users = ref([]);
 const search = ref('');
 const imgUrl = import.meta.env.VITE_IMG_BASE_URL;
 const userToDelete = ref(false);
-const isConfirmDelete = ref(false); // ✅ added this
+const isConfirmDelete = ref(false); 
 const closeModal = () => {
 	isConfirmDelete.value = false;
 };

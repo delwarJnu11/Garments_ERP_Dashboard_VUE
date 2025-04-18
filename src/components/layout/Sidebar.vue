@@ -5,6 +5,7 @@ import OrdersBuyers from "../moduleMenu/OrdersBuyers.vue";
 import Production from "../moduleMenu/Production.vue";
 import Users from "../moduleMenu/Users.vue";
 import InventoryProducts from "../moduleMenu/InventoryProducts.vue";
+import PurchaseSuppliers from "../moduleMenu/PurchaseSuppliers.vue";
 
 const isSidebarOpen = ref(true);
 
@@ -71,6 +72,7 @@ const toggleMenu = (menu) => {
 					<!-- Inventory management -->
 				 <InventoryProducts :activeMenu="activeMenu"
 				 :toggleMenu="toggleMenu"/>
+				 <PurchaseSuppliers :activeMenu="activeMenu" :toggleMenu="toggleMenu"/>
 			</ul>
 		</nav>
 	</aside>

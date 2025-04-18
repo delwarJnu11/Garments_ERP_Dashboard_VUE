@@ -1,4 +1,3 @@
-
 <script setup>
 import { useProductStore } from '@/store/ProductStore';
 import { Trash2, UserRoundPen } from 'lucide-vue-next';
@@ -17,11 +16,7 @@ console.log(productStore)
 onMounted(async () => {
 	await productStore.fetchProducts('/products');
 });
-
-
 </script>
-
-
 <template>
 	<SearchModule v-model="productStore.search" @input="productStore.fetchProducts" />
 	<PageHeading title="User Lists" subTitle="Manage your products  Lists" btnText="Products" to="/products/create" />
@@ -73,14 +68,15 @@ onMounted(async () => {
 				</template>
 
 				<template v-else>
-					<tr v-for="product in productStore.products" :key="product?.id"
-						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center" v-if= "!productStore.loading">
-						
+					<tr v-for="product in productStore.products.data" :key="product?.id"
+						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center"
+						v-if="!productStore.loading">
+
 						<td class="px-6 py-4 border border-gray-200">{{ product?.id }} </td>
 						<!-- <td class="px-6 py-4 border border-gray-200 text-center"><img :src="`${imgUrl}/products/${product.image}`" alt="product"
 							class="w-10 h-10 rounded-full object-cover mx-auto" /> </td> -->
 						<td class="px-6 py-4 border border-gray-200  border-gray-200ont-medium">
-							
+
 							{{ product?.name }}
 						</td>
 						<!-- <td class="px-6 py-4 border border-gray-200 font-medium ">{{ category?.is_raw_material }}</td> -->
@@ -122,20 +118,16 @@ onMounted(async () => {
 					</tr>
 				</template>
 			</tbody>
-		
 			<!-- <ConfirmDeleteModal
 			v-if="isConfirmDelete"
 			:id="userToDelete"
 			:close-modal="closeModel"
-			@confirmDelete="handleConfirmDelete"
-
-			/> -->
+			@confirmDelete="handleConfirmDelete"/> -->
 		</table>
 	</div>
 	<!-- pagination -->
-	<Pagination :data="productStore.products" :fetchData="productStore.fetchProducts" />
+	<Pagination :items="productStore.products" :fetchData="productStore.fetchProducts" />
+
 </template>
 
-<style  scoped>
-
-</style>
+<style scoped></style>
