@@ -15,6 +15,8 @@ import ProductList from '../products/ProductList.vue';
 import { useAuthStore } from '@/store/AuthStore';
 import CreateProduct from '../products/CreateProduct.vue';
 import Suppliers from '../suppliers/Suppliers.vue';
+import CreatePurchaseInvoice from '../purchaseInvoice/CreatePurchaseInvoice.vue';
+import PurchaseInvoice from '../purchaseInvoice/PurchaseInvoice.vue';
 
 
 const routes = [
@@ -44,6 +46,8 @@ const routes = [
 		{ path: '/products', component: ProductList },
 		{ path: '/products/create', component: CreateProduct },
 		{ path: '/suppliers', component: Suppliers },
+		{path:'/purchaseInvoice',component:PurchaseInvoice},
+		{path:'/createInvoice',component:CreatePurchaseInvoice}
 	  ],
 	},
   ];

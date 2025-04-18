@@ -11,10 +11,22 @@ export const useProductStore = defineStore('product', {
 		error: null,
 		loading: false,
 		product: null,
+		allProducts: null,
 		productTypes:[],
 		sizes:[],
 		uoms:[],
+		warehouses:[],
 	}),
+	getters:{
+		rawMaterials: (state) => {
+			const flatProducts = state.allProducts || [];
+			const filtered = flatProducts.filter(product =>
+				product.product_type?.name === 'Raw Material'
+			);
+			// console.log("Raw Materials Filtered:", filtered);
+			return filtered;
+		},
+	},
 
 	actions: {
 		async fetchProducts(url = '/products') {
@@ -22,13 +34,27 @@ export const useProductStore = defineStore('product', {
 			try {
 				const response = await api.get(url, { params: { search: this.search } });
 				this.products = response.data.products;
-				// console.log("Response data:", response.data.products);
+				// console.log("Response data:", this.products);
 			} catch (error) {
 				this.error = error;
 			} finally {
 				this.loading = false;
 			}
 		},
+		async fetchForInvoiceProducts(){
+			this.loading = true;
+			try {
+				const res=await api.get('/allProducts')
+				this.allProducts =res.data.products
+				// console.log("All Products:", this.allProducts);
+				console.log("Raw Materials Filtered:", this.rawMaterials);
+			} catch (error) {
+				console.log(error)
+			}finally{
+				this.loading=false
+			}
+		},
+	
 		async fetchProductType(url = '/productTypes') {
 			this.loading = true;
 			try {
@@ -60,12 +86,23 @@ export const useProductStore = defineStore('product', {
 				this.uoms = res.data.uoms
 				// console.log("Response data:",res.data)
 			} catch (error) {
-				
+				console.log(error)
 			}finally{
 				this.loading= false
 			}
 				
 		},
+		async fetchWarehouse(){
+			this.loading = true
+			try {
+				const res = await api.get('/warehouses')
+				this.warehouses = res.data.warehouses
+			} catch (error) {
+				console.log(error)
+			}finally{
+				this.loading= false
+			}
+		}
 	// for create handle submit
 	
 	},

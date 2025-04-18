@@ -53,8 +53,13 @@ const props = defineProps({
 					</RouterLink>
 				</li>
 				<li>
-					<RouterLink to="/PurchaseInvoice" class="block p-2 text-black hover:bg-purple-300 transition-all duration-300 ">
+					<RouterLink to="/purchaseInvoice" class="block p-2 text-black hover:bg-purple-300 transition-all duration-300 ">
 					Purchase Invoice
+					</RouterLink>
+				</li>
+				<li>
+					<RouterLink to="/createInvoice" class="block p-2 text-black hover:bg-purple-300 transition-all duration-300 ">
+					Create Purchase Invoice
 					</RouterLink>
 				</li>
 				<!-- <li>

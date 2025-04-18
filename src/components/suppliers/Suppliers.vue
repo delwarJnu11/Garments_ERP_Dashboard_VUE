@@ -5,6 +5,7 @@ import SearchModule from '../ui/SearchModule.vue';
 import { useSupplerStore } from '@/store/SupplierStore';
 import { onMounted, ref } from 'vue';
 import ConfirmDeleteModal from '../ui/ConfirmDeleteModal.vue';
+import Pagination from '../ui/Pagination.vue';
 
 const imgURL = import.meta.env.VITE_IMG_BASE_URL
 const supplierStore = useSupplerStore()
@@ -12,16 +13,18 @@ const userToDelete = ref(false)
 const isConfirmDelete = ref(false)
 
 
-console.log(supplierStore)
+// console.log(supplierStore)
 onMounted(async () => {
 	await supplierStore.fetchSupplier('/suppliers')
 	console.log("Image Path Test:", `${imgURL}/suppliers/${supplierStore.suppliers.data?.[0]?.photo}`)
 })
 
-const handleDelete=()=>{
+const handleDelete = () => {
 
 }
 </script>
+
+
 <template>
 	<SearchModule v-model="search" @input="supplierStore.fetchSupplier" />
 	<PageHeading title="Supplier Lists" subTitle="Manage your suppliers" btnText="Suppliers" to="/suppliers/create" />
@@ -38,14 +41,43 @@ const handleDelete=()=>{
 					<th class="px-6 py-4">Action</th>
 				</tr>
 			</thead>
+			<template v-if="!supplierStore.suppliers.data || supplierStore.suppliers.data.length === 0">
+				<tr v-for="n in 5" :key="n" class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition">
+					<td class="px-6 py-4 border border-gray-200">
+						<div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
+					</td>
+					<td class="px-6 py-4 border border-gray-200">
+						<div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+					</td>
+					<td class="px-6 py-4 border border-gray-200">
+						<div class="flex items-center gap-3">
+							<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+							<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+						</div>
+					</td>
+					<td class="px-6 py-4 border border-gray-200">
+						<div class="flex items-center gap-3">
+							<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+							<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+						</div>
+					</td>
+					<td class="px-6 py-4 border border-gray-200">
+						<div class="flex items-center gap-3">
+							<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+							<div class="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+						</div>
+					</td>
+				</tr>
+			</template>
 			<tbody>
-				<template v-if="supplierStore.loading">
+				<template v-if="supplierStore.suppliers.loading">
 					<!-- Loading Skeletons -->
 					<tr v-for="n in 5" :key="n" class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition">
 						<!-- Your loading skeleton code here -->
 					</tr>
 				</template>
 				<template v-else>
+
 					<tr v-for="supplier in supplierStore.suppliers.data" :key="supplier.id"
 						class="odd:bg-white even:bg-gray-50 hover:bg-gray-50 transition text-center">
 						<td class="px-6 py-4 border border-gray-200">{{ supplier.id }}</td>
@@ -73,14 +105,11 @@ const handleDelete=()=>{
 					</tr>
 				</template>
 			</tbody>
-			<ConfirmDeleteModal
-			v-if="isConfirmDelete"
-			:id="userToDelete"
-			:close-modal="closeModel"
-			@confirmDelete="handleConfirmDelete"/>
+			<ConfirmDeleteModal v-if="isConfirmDelete" :id="userToDelete" :close-modal="closeModel"
+				@confirmDelete="handleConfirmDelete" />
 		</table>
 	</div>
 	<!-- pagination -->
-	<Pagination :items="users" :fetchData="fetchUsers" />
+	<Pagination :items="supplierStore.suppliers" :fetchData="supplierStore.fetchSupplier" />
 </template>
 <style lang="scss" scoped></style>

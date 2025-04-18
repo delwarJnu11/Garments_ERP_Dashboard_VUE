@@ -16,7 +16,8 @@ export const useSupplerStore = defineStore('supplier',{
             try {
                 const res = await api.get(url,{params:{search:this.search}})
                 this.suppliers = res.data.suppliers
-                console.log(res.data)
+                // this.suppliers = res.data.suppliers.data
+                // console.log(res.data)
             } catch (error) {
                 console.log(error)
             }
