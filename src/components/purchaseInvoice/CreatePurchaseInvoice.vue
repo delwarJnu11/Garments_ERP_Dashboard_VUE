@@ -9,7 +9,6 @@ import { onMounted, reactive } from 'vue';
     const supplierStore = useSupplerStore()
     const productStore = useProductStore()
     const cartStore = useCartStore()
-   
     const dataObj=reactive({
         selectedSupplier:{},
         selectedWarehouse :{},
