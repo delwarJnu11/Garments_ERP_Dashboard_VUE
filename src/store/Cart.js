@@ -1,57 +1,73 @@
-// src/stores/cartStore.js
-import { defineStore } from 'pinia'
+import { ref } from 'vue';
 
-export const useCartStore = defineStore('cart', {
-  state: () => ({
-    cart: [],
-    cartName: 'myCart',
-  }),
+export function useCart(cartName) {
+  const getCart = () => {
+    const cart = JSON.parse(localStorage.getItem(cartName)) || [];
+    return cart;
+  };
 
-  actions: {
-    initCart(cartName = 'myCart') {
-      this.cartName = cartName
-      const saved = localStorage.getItem(cartName)
-      this.cart = saved ? JSON.parse(saved) : []
-    },
+  // const save = (item) => {
+  //   let cart = getCart();
+  //   const exists = cart.find((i) => i.item_id === item.item_id);
+  //   if (!exists) {
+  //     cart.push(item);
+  //   } else {
+  //     cart = cart.map((i) =>
+  //       i.item_id === item.item_id
+  //         ? {
+  //             ...i,
+  //             qty: i.qty + item.qty,
+  //             subtotal: (i.qty + item.qty) * i.price - i.discount
+  //           }
+  //         : i
+  //     );
+  //   }
+  //   localStorage.setItem(cartName, JSON.stringify(cart));
+  // };
 
-    save(item) {
-      const exists = this.cart.find(i => i.item_id === item.item_id)
-      if (!exists) {
-        this.cart.push(item)
-      } else {
-        this.cart = this.cart.map(i =>
-          i.item_id === item.item_id
-            ? {
-                ...i,
-                qty: i.qty + item.qty,
-                subtotal: (i.qty + item.qty) * i.price - i.discount
-              }
-            : i
-        )
-      }
-      this._syncLocal()
-    },
 
-    deleteItem(id) {
-      this.cart = this.cart.filter(item => item.item_id !== id)
-      this._syncLocal()
-    },
 
-    clearCart() {
-      this.cart = []
-      this._syncLocal()
-    },
+  const save = (item) => {
+    let cart = getCart();
+    const exists = cart.find((i) => i.item_id === item.item_id);
+  
+    if (!exists) {
+      cart.push(item);
+    } else {
+      cart = cart.map((i) => {
+        if (i.item_id === item.item_id) {
+          const newQty = i.qty + item.qty;
+          const total = newQty * i.price;
+          const discountAmount = (total * i.discount) / 100;
+          const vatAmount = (total * i.vat) / 100;
+          const subtotal = total - discountAmount + vatAmount;
+  
+          return {
+            ...i,
+            qty: newQty,
+            subtotal: subtotal,
+          };
+        }
+        return i;
+      });
+    }
+  
+    localStorage.setItem(cartName, JSON.stringify(cart));
+  };
+  
+  const deleteItem = (id) => {
+    const cart = getCart().filter((item) => item.item_id !== id);
+    localStorage.setItem(cartName, JSON.stringify(cart));
+  };
 
-    _syncLocal() {
-      localStorage.setItem(this.cartName, JSON.stringify(this.cart))
-    },
-  },
+  const clearCart = () => {
+    localStorage.setItem(cartName, JSON.stringify([]));
+  };
 
-  getters: {
-    cartItems: (state) => state.cart,
-    cartTotal: (state) =>
-      state.cart.reduce((sum, item) => sum + item.subtotal, 0),
-    cartCount: (state) =>
-      state.cart.reduce((count, item) => count + item.qty, 0),
-  },
-})
+  return {
+    getCart,
+    save,
+    deleteItem,
+    clearCart
+  };
+}

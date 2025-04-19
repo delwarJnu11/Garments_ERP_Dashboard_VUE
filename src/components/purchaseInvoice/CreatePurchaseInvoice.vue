@@ -1,14 +1,17 @@
 
 
 <script setup>
-import { useCartStore } from '@/store/Cart';
+import { useCart } from '@/store/Cart';
 import { useProductStore } from '@/store/ProductStore';
 import { useSupplerStore } from '@/store/SupplierStore';
+import { ref } from 'vue';
 import { onMounted, reactive } from 'vue';
+
 
     const supplierStore = useSupplerStore()
     const productStore = useProductStore()
-    const cartStore = useCartStore()
+    const cart = useCart("purchase");
+    const cartItems  = ref(cart.getCart());
     const dataObj=reactive({
         selectedSupplier:{},
         selectedWarehouse :{},
@@ -31,28 +34,78 @@ import { onMounted, reactive } from 'vue';
        cartStore.initCart('myCart')
     })
 
-    const addToCart=()=>{
-        let total = dataObj.unit_price*dataObj.qty
-        let discountAmount = (total * dataObj.discount) / 100;
-        let vatAmount =  (total * dataObj.vat) / 100;
-        let subtotal = (total - discountAmount) + vatAmount
-        const data ={
-            item_id:dataObj.selectedProduct.id,
-            name:dataObj.selectedProduct.name,
-            price:dataObj.selectedProduct.unit_price,
-            discount:discountAmount,
-            vat:vatAmount,
-            qty:dataObj.qty,
-            subtotal:subtotal,
-        }
-        cartStore.save(data)
-        cartStore.cartItems.value = cartStore.getCart()
-        console.log(data)
-        dataObj.selectedProduct={}
-        dataObj.qty=1
-        dataObj.discount=0
-        dataObj.vat=0
-    }
+    
+
+//     const addToCart = () => {
+//   if (!dataObj.selectedProduct?.unit_price) {
+//     alert("Please select a product with a valid unit price.");
+//     return;
+//   }
+
+//   let total = dataObj.selectedProduct.unit_price * dataObj.qty;
+//   let discountAmount = (total * dataObj.discount) / 100;
+//   let vatAmount = (total * dataObj.vat) / 100;
+//   let subtotal = (total - discountAmount) + vatAmount;
+
+//   const data = {
+//     item_id: dataObj.selectedProduct.id,
+//     name: dataObj.selectedProduct.name,
+//     price: dataObj.selectedProduct.unit_price,
+//     discount: dataObj.discount, // Save the actual percentage for UI
+//     vat: dataObj.vat,           // Same here
+//     qty: dataObj.qty,
+//     subtotal: subtotal,
+//   };
+
+//   cart.save(data);
+//   cartItems.value = cart.getCart();
+
+//   console.log("Added item:", data);
+
+//   // Reset inputs
+//   dataObj.selectedProduct = {};
+//   dataObj.qty = 1;
+//   dataObj.discount = 0;
+//   dataObj.vat = 0;
+// };
+
+
+const addToCart = () => {
+  if (!dataObj.selectedProduct?.unit_price) {
+    alert("Please select a product with a valid unit price.");
+    return;
+  }
+
+  let total = dataObj.selectedProduct.unit_price * dataObj.qty;
+  let discountAmount = (total * dataObj.discount) / 100;
+  let vatAmount = (total * dataObj.vat) / 100;
+  let subtotal = total - discountAmount + vatAmount;
+
+  const data = {
+    item_id: dataObj.selectedProduct.id,
+    name: dataObj.selectedProduct.name,
+    price: dataObj.selectedProduct.unit_price,
+    qty: dataObj.qty,
+
+    // Save both percentage and actual values
+    discount: `${dataObj.discount}% (${discountAmount.toFixed(2)})`,
+    vat: `${dataObj.vat}% (${vatAmount.toFixed(2)})`,
+
+    subtotal: subtotal.toFixed(2),
+  };
+
+  cart.save(data);
+  cartItems.value = cart.getCart();
+
+  console.log("Added item:", data);
+
+  // Reset
+  dataObj.selectedProduct = {};
+  dataObj.qty = 1;
+  dataObj.discount = 0;
+  dataObj.vat = 0;
+};
+
 </script>
 
 <template>
@@ -135,11 +188,11 @@ import { onMounted, reactive } from 'vue';
                         </td>
                         <td class="p-2" ><input  type="number" class="w-full  border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600" :value="dataObj.selectedProduct.unit_price ">
                         </td>
-                        <td class="p-2" ><input  v-model="dataObj.selectedProduct.qty" type="number" class="w-full border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600">
+                        <td class="p-2" ><input  v-model="dataObj.qty" type="number" class="w-full border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600">
                         </td>
-                        <td class="p-2"><input type="number" class="w-full border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600" v-model="dataObj.selectedProduct.discount">
+                        <td class="p-2"><input type="number" class="w-full border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600" v-model="dataObj.discount">
                         </td>
-                        <td class="p-2"><input type="number" class="w-full border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600" v-model="dataObj.selectedProduct.discount">
+                        <td class="p-2"><input type="number" class="w-full border border-gray-100 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600" v-model="dataObj.vat">
                         </td>
                         <td class="p-2"><input type="text" disabled class="w-full rounded border-gray-300"></td>
                         <td class="p-2"><button @click="addToCart" class="bg-purple-600 text-white px-3 py-1 rounded">Add</button></td>
@@ -147,9 +200,9 @@ import { onMounted, reactive } from 'vue';
                 </thead>
                 <tbody class="bg-white">
                     <!-- Static example row -->
-                    <tr v-for="(item, i) in cartStore" :key="item.id">
+                    <tr v-for="(item, i) in cartItems" :key="item.id">
                         <td class="p-2">{{ item.name }}</td>
-                        <td class="p-2">{{ item.unit_price }}</td>
+                        <td class="p-2">{{ item.price }}</td>
                         <td class="p-2">{{ item.qty }}</td>
                         <td class="p-2">{{ item.discount }}</td>
                         <td class="p-2">{{ item.vat }}</td>
