@@ -46,7 +46,50 @@ const props = defineProps({
 						to="/employee"
 						class="block p-2 rounded-md text-black hover:bg-gray-200 transition-all duration-300"
 					>
+						Department List
+					</RouterLink>
+				</li>
+
+				<li>
+					<RouterLink
+						to="/employee"
+						class="block p-2 rounded-md text-black hover:bg-gray-200 transition-all duration-300"
+					>
+						Designation List
+					</RouterLink>
+				</li>
+
+				<li>
+					<RouterLink
+						to="/employee"
+						class="block p-2 rounded-md text-black hover:bg-gray-200 transition-all duration-300"
+					>
 						Employee List
+					</RouterLink>
+				</li>
+				<li>
+					<RouterLink
+						to="/employee"
+						class="block p-2 rounded-md text-black hover:bg-gray-200 transition-all duration-300"
+					>
+						Attendance List
+					</RouterLink>
+				</li>
+				<li>
+					<RouterLink
+						to="/employee"
+						class="block p-2 rounded-md text-black hover:bg-gray-200 transition-all duration-300"
+					>
+						Leave List
+					</RouterLink>
+				</li>
+				
+				<li>
+					<RouterLink
+						to="/employee"
+						class="block p-2 rounded-md text-black hover:bg-gray-200 transition-all duration-300"
+					>
+						Payroll
 					</RouterLink>
 				</li>
 			</ul>
