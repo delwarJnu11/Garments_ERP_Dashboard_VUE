@@ -64,6 +64,7 @@ const handleOrder = () => {
 					<option
 						v-if="!buyers.loading"
 						v-for="buyer in buyers.buyers.data"
+						:key="buyer?.id"
 						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 						:value="buyer?.id"
 					>
@@ -71,6 +72,7 @@ const handleOrder = () => {
 					</option>
 				</select>
 			</div>
+
 			<div>
 				<label
 					for="supervisor_id"
@@ -85,15 +87,17 @@ const handleOrder = () => {
 				>
 					<option value="">Select Supervisor</option>
 					<option
-						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 						v-if="!users.loading"
 						v-for="supervisor in users.supervisors"
+						:key="supervisor?.id"
 						:value="supervisor?.id"
+						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 					>
 						{{ supervisor?.name }}
 					</option>
 				</select>
 			</div>
+
 			<div>
 				<label
 					for="status_id"
@@ -103,20 +107,22 @@ const handleOrder = () => {
 				<select
 					id="status_id"
 					name="status_id"
-					v-model="order?.status_id"
+					v-model="order.status_id"
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				>
 					<option value="">Select Status</option>
 					<option
-						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 						v-if="!status.loading"
 						v-for="stat in status.allStatus"
+						:key="stat?.id"
 						:value="stat?.id"
+						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 					>
 						{{ stat.name }}
 					</option>
 				</select>
 			</div>
+
 			<div>
 				<label
 					for="fabric_type_id"
@@ -131,15 +137,17 @@ const handleOrder = () => {
 				>
 					<option value="">Select Fabric Type</option>
 					<option
-						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 						v-if="!fabrics.loading"
 						v-for="fabric in fabrics.fabricsTypes"
+						:key="fabric?.id"
 						:value="fabric?.id"
+						class="text-base font-normal tracking-wide leading-5 cursor-pointer"
 					>
 						{{ fabric?.name }}
 					</option>
 				</select>
 			</div>
+
 			<div>
 				<label
 					for="gsm"
@@ -155,6 +163,7 @@ const handleOrder = () => {
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				/>
 			</div>
+
 			<div>
 				<label
 					for="delivery_date"
@@ -169,6 +178,7 @@ const handleOrder = () => {
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				/>
 			</div>
+
 			<div class="md:col-span-2">
 				<label
 					for="description"
@@ -178,12 +188,13 @@ const handleOrder = () => {
 				<textarea
 					id="description"
 					name="description"
-					rows="4"
 					v-model="order.description"
+					rows="4"
 					placeholder="Add order details..."
 					class="w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary p-2.5"
 				></textarea>
 			</div>
+
 			<div class="md:col-span-2 flex justify-end">
 				<button
 					type="submit"
