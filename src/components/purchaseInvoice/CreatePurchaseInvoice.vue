@@ -3,6 +3,7 @@ import { api } from '@/api';
 import { useCart } from '@/store/Cart';
 import { useProductStore } from '@/store/ProductStore';
 import { useSupplerStore } from '@/store/SupplierStore';
+import { watch } from 'vue';
 import { ref } from 'vue';
 import { onMounted, reactive } from 'vue';
 
@@ -15,8 +16,12 @@ const today = new Date()
 const purchaseDate = new Date().toLocaleDateString()
 const deliveryDate = new Date()
 deliveryDate.setDate(today.getDate() + 7)
-const deliveryDaeFormat = deliveryDate.toLocaleDateString()
+const deliveryDateFormat = deliveryDate.toLocaleDateString()
 
+//Auto update totals if cart changes
+watch(cartItems, () => {
+    grandTotalCalculate();
+}, { deep: true });
 
 onMounted(async () => {
     await supplierStore.fetchAllSuppliers()
@@ -24,8 +29,20 @@ onMounted(async () => {
     await productStore.fetchWarehouse()
     await productStore.fetchForInvoiceProducts()
     await productStore.fetchInoviceId()
-    cartStore.initCart('myCart')
-  
+   
+    
+    // Save to from here localStorage not cart.js 
+    let savedTotal = localStorage.getItem('purchaseTotal')
+    if(savedTotal){
+        const parsed = JSON.parse(savedTotal)
+        dataObj.total = parsed.total|| 0
+        dataObj.grandTotal = parsed.grandTotal|| 0
+        dataObj.total_discount = parsed.total_discount|| 0
+        dataObj.total_vat = parsed.total_vat|| 0
+    }
+    cartItems.value = cart.getCart()
+    grandTotalCalculate()
+
 });
 
 const dataObj = reactive({
@@ -35,29 +52,60 @@ const dataObj = reactive({
     name: '',
     item_id: 0,
     qty: 1,
+    total:0,
     discount: 0,
     total_discount: 0,
     vat: 0,
-    pending_amount: 0,
+    paid_amount: 0,
     total_vat: 0,
     grandTotal: 0,
 })
 
-const grandTotalCalculate=()=>{
-    dataObj.total_discount = cart.getCart().reduce((acc,element)=>acc + element.discount,0 )
-    dataObj.total_vat = cart.getCart().reduce((acc,element)=>acc + element.vat,0 )
-    dataObj.grandTotal = cart.getCart().reduce((acc,element)=>acc + element.subtotal,0 )
-    console.log(dataObj.total_discount)
-    console.log(dataObj.total_vat)
-    console.log(dataObj.grandTotal)
-}
+
+// const grandTotalCalculate=()=>{
+//     const cartData = cart.getCart()
+//     dataObj.total = cartData.getCart().reduce((acc,element)=>acc + element.total,0);
+//     dataObj.total_discount = cartData.getCart().reduce((acc, element) => acc + element.discountAmount, 0);
+//     dataObj.total_vat = cartData.getCart().reduce((acc, element) => acc + element.vatAmount, 0);
+//     dataObj.grandTotal = cartData.getCart().reduce((acc, element) => acc + parseFloat(element.subtotal), 0);
+
+//     // Save to localStorage
+//     const totals={
+//         total : dataObj.total,
+//         total_discount:dataObj.total_discount,
+//         total_vat:dataObj.total_vat,
+//         grandTotal : dataObj.grandTotal
+//     };
+
+//     localStorage.setItem("purchaseTotal",JSON.stringify(totals));
+//     // console.log("Total Discout",dataObj.total_discount.toFixed(2))
+//     // console.log("Total Vat",dataObj.total_vat.toFixed(2))
+//     // console.log("Total Grand amount",dataObj.grandTotal.toFixed(2))
+// }
+const grandTotalCalculate = () => {
+    const cartData = cart.getCart(); // this is already an array
+
+    dataObj.total = cartData.reduce((acc, element) => acc + element.total, 0);
+    dataObj.total_discount = cartData.reduce((acc, element) => acc + element.discountAmount, 0);
+    dataObj.total_vat = cartData.reduce((acc, element) => acc + element.vatAmount, 0);
+    dataObj.grandTotal = cartData.reduce((acc, element) => acc + parseFloat(element.subtotal), 0);
+
+    const totals = {
+        total: dataObj.total,
+        total_discount: dataObj.total_discount,
+        total_vat: dataObj.total_vat,
+        grandTotal: dataObj.grandTotal
+    };
+
+    localStorage.setItem("purchaseTotal", JSON.stringify(totals));
+};
+
 
 const addToCart = () => {
     if (!dataObj.selectedProduct?.unit_price) {
         alert("Please select a product with a valid unit price.");
         return;
     }
-
     let total = dataObj.selectedProduct.unit_price * dataObj.qty;
     let discountAmount = (total * dataObj.discount) / 100;
     let vatAmount = (total * dataObj.vat) / 100;
@@ -68,10 +116,13 @@ const addToCart = () => {
         name: dataObj.selectedProduct.name,
         price: dataObj.selectedProduct.unit_price,
         qty: dataObj.qty,
-
-        // Save both percentage and actual values
-        discount: `${dataObj.discount}% (${discountAmount.toFixed(2)})`,
-        vat: `${dataObj.vat}% (${vatAmount.toFixed(2)})`,
+        paid_amount:dataObj.paid_amount,
+        total:total,
+        discount: dataObj.discount, //store dis% only
+        discountAmount: discountAmount,
+        
+        vat: dataObj.vat, // store vat% only
+        vatAmount: vatAmount,
 
         subtotal: subtotal.toFixed(2),
     };
@@ -88,33 +139,41 @@ const addToCart = () => {
     dataObj.discount = 0;
     dataObj.vat = 0;
 };
-
-
-
-const purchaseProcess = ()=>{
-   const processData ={
-    products:cart.getCart,
-    supplier:dataObj.selectedSupplier,
-    warehouse:dataObj.selectedWarehouse,
-    totalDiscount:dataObj.total_discount,
-    totalVat:dataObj.total_vat,
-    grandTotal:dataObj.grandTotal
-   }
-   api.post('purchaseInvoice',processData)
-    .then((result) => {
-        console.log(result)
-    }).catch((err) => {
-        console.log(err)
-    });
-   }
-
-
-const handleProcess = ()=>{
-    purchaseProcess.supplier_id = selectedSupplier.value?.id
-    purchaseProcess.warehouse_id = selectedWarehouse.value?.id
-    purchaseProcess.products = item.value
-
+const clearCart=()=>{
+    cart.clearCart();
+    cartItems.value = cart.getCart();
+    grandTotalCalculate()
+   
 }
+
+
+
+const purchaseProcess = () => {
+    const processData = {
+    products: cart.getCart(),
+    supplier_id: dataObj.selectedSupplier.id,
+    warehouse_id: dataObj.selectedWarehouse.id,
+    totalDiscount: dataObj.total_discount,
+    totalVat: dataObj.total_vat,
+    grandTotal: dataObj.grandTotal,
+    paid_amount: dataObj.paid_amount
+}
+
+    api.post('purchaseInvoice', processData)
+        .then((result) => {
+            console.log(result)
+        }).catch((err) => {
+            console.log(err)
+        });
+}
+
+
+// const handleProcess = () => {
+//     purchaseProcess.supplier_id = selectedSupplier.value?.id
+//     purchaseProcess.warehouse_id = selectedWarehouse.value?.id
+//     purchaseProcess.products = item.value
+
+// }
 
 </script>
 
@@ -150,7 +209,7 @@ const handleProcess = ()=>{
                 <div class="bg-gray-100 border p-4 rounded">
                     <p><strong>Invoice ID:</strong> #<span class="invoice_id">INV-</span></p>
                     <p><strong>Purchase Date:</strong> {{ purchaseDate }}<span class="purchase_date"></span></p>
-                    <p><strong>Delivery Date:</strong>{{ deliveryDaeFormat }} <span class="deliver_date"></span></p>
+                    <p><strong>Delivery Date:</strong>{{ deliveryDateFormat }} <span class="deliver_date"></span></p>
                 </div>
             </div>
         </div>
@@ -185,7 +244,7 @@ const handleProcess = ()=>{
                         <th class="p-2">VAT (%)</th>
                         <th class="p-2">Subtotal</th>
                         <th class="p-2">
-                            <button class="bg-red-500 text-white px-3 py-1 rounded">Clear All</button>
+                            <button @click="clearCart" class="bg-red-500 text-white px-3 py-1 rounded">Clear All</button>
                         </th>
                     </tr>
                     <tr>
@@ -227,8 +286,11 @@ const handleProcess = ()=>{
                         <td class="p-2">{{ item.name }}</td>
                         <td class="p-2">{{ item.price }}</td>
                         <td class="p-2">{{ item.qty }}</td>
-                        <td class="p-2"> - {{ item.discount }}</td>
-                        <td class="p-2"> + {{ item.vat }}</td>
+                        <!-- <td class="p-2"> - {{ item.discount }}</td>
+                       <td class="p-2"> + {{ item.vat }}</td> -->
+                        <td class="p-2"> - {{ item.discount }}% ({{ item.discountAmount }})</td>
+                        <td class="p-2"> + {{ item.vat }}% ({{ item.vatAmount }})</td>
+
                         <td class="p-2">{{ item.subtotal }}</td>
                         <td class="p-2"><button class="bg-amber-500 text-white px-2 py-1 rounded">Remove</button></td>
                     </tr>
@@ -240,20 +302,22 @@ const handleProcess = ()=>{
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div>
                 <h6 class="text-lg font-semibold mb-3">Payment info:</h6>
+                
                 <ul class="list-disc list-inside">
                     <li>Credit Card - 123***********789</li>
-                    <li>Paid Amount: <span>$1,000</span></li>
+                    <li>Paid Amount: <span><input v-model="dataObj.paid_amount" type="number" 
+                        class="w-50 border border-gray-500 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"></span></li>
                 </ul>
                 <p class="mt-4"><strong>Delivery Address:</strong> 123 Factory Road, Dhaka</p>
                 <p><strong>Notes:</strong> Urgent delivery required.</p>
             </div>
             <div class="text-right">
                 <h5 class="text-lg font-semibold">Invoice Summary:</h5>
-                <p><strong>Total Amount:</strong> <span>$1,500.00</span></p>
-                <p><strong>Discount:</strong> <span>- $75.00</span></p>
-                <p><strong>VAT (15%):</strong> <span>+ $213.75</span></p>
+                <p><strong>Total Amount:</strong> <span>{{ dataObj.total }}</span></p>
+                <p><strong>Discount:</strong> <span>-  {{dataObj.total_discount}}</span></p>
+                <p><strong>VAT ():</strong> <span>+ {{  dataObj.total_vat }}</span></p>
                 <hr class="my-2">
-                <h4 class="text-xl font-bold">Grand Total: <span>$1,638.75</span></h4>
+                <h4 class="text-xl font-bold">Grand Total: <span>${{  dataObj.grandTotal }}</span></h4>
             </div>
         </div>
 

@@ -17,6 +17,7 @@ import CreateProduct from '../products/CreateProduct.vue';
 import Suppliers from '../suppliers/Suppliers.vue';
 import CreatePurchaseInvoice from '../purchaseInvoice/CreatePurchaseInvoice.vue';
 import PurchaseInvoice from '../purchaseInvoice/PurchaseInvoice.vue';
+import ShowInvoice from '../purchaseInvoice/ShowInvoice.vue';
 
 
 const routes = [
@@ -47,7 +48,8 @@ const routes = [
 		{ path: '/products/create', component: CreateProduct },
 		{ path: '/suppliers', component: Suppliers },
 		{path:'/purchaseInvoice',component:PurchaseInvoice},
-		{path:'/createInvoice',component:CreatePurchaseInvoice}
+		{path:'/createInvoice',component:CreatePurchaseInvoice},
+		{path:'/purchaseInvoice/show/:id',component:ShowInvoice},
 	  ],
 	},
   ];

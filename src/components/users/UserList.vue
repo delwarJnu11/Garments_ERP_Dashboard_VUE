@@ -31,7 +31,7 @@ const fetchUsers = async (url) => {
 			users.value = res.data;
 		}
 	} catch (err) {
-		console.error('fetching error', err); // ✅ fixed console error variable
+		console.error('fetching error', err);
 	}
 };
 

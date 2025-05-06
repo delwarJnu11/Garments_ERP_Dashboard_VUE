@@ -24,7 +24,7 @@ export const useProductStore = defineStore('product', {
 			const filtered = flatProducts.filter(product =>
 				product.product_type?.name === 'Raw Material'
 			);
-			console.log("Raw Materials Filtered:", filtered);
+			// console.log("Raw Materials Filtered:", filtered);
 			return filtered;
 		},
 	},
@@ -98,7 +98,7 @@ export const useProductStore = defineStore('product', {
 			try {
 				const res = await api.get('/warehouses')
 				this.warehouses = res.data.warehouses
-				console.log("Response warehouse:",res.data.warehouses)
+				// console.log("Response warehouse:",res.data.warehouses)
 			} catch (error) {
 				console.log(error)
 			}finally{
@@ -110,7 +110,7 @@ export const useProductStore = defineStore('product', {
 			console.log("Fetching invoice ID..."); 
 			try {
 			  const res = await api.get('/invoice-id');
-			  console.log('Invoice API response:', res);
+			//   console.log('Invoice API response:', res);
 			  this.invoiceId = res.data.new_invoice_id; 
 			} catch (error) {
 			  console.error('Failed to fetch invoice ID:', error);
